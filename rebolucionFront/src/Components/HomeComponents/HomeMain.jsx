@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './HomeMain.css'
 const HomeMain = () => {
   const navigate = useNavigate();
 
@@ -9,7 +9,7 @@ const HomeMain = () => {
 
   return (
     <div>
-      <h1 style={{ color: "black" }}>Estas en el home</h1>
+      <h1 className='h1'>Estas en el home</h1>
       
       {/* Botones para redirigir a /login y /register */}
       <button onClick={() => navigate('/login')} className="btn btn-primary m-2">

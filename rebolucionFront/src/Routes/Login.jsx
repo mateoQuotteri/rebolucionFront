@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LoginForm from '../Components/LoginForm';
+import LoginForm from '../Components/LoginComponents/LoginForm';
 
 const Register = () => {
 
