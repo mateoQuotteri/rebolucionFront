@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LoginForm.css'
+import '../Utils/colores.css'
 const LoginForm = () => {
   const navigate = useNavigate();
 
@@ -10,7 +11,7 @@ const LoginForm = () => {
   return (
     <div>
       <h1>Estas en el Login</h1>
-       <form action="">
+       <form className='back-naranja'  action="">
           {/* Botones para redirigir a /login y /register */}
           <button onClick={() => navigate('/')} className="btn btn-primary m-2">
         Ir a Home
