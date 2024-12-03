@@ -1,32 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Home from './Routes/Home'
-import Register from './Routes/Register'
-import Login from './Routes/Login'
-
+import '../src/Utils/colores.css'
+import Layout  from './Layout/Layout'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
 
-      <Router>
-        <Routes>
-         <Route path="/register" element={<Register />} />
-
-         <Route path="/login" element={<Login />} />
-
-
+      <Routes>
+        <Route path="/" element={<Layout />} >
           <Route path="/" element={<Home />} />
-
-
-        </Routes>
-      </Router>
+          <Route path="*" element={<h1>No encontramos tu ruta </h1>} />
+        </Route>
+      </Routes>
     </>
   )
 }

@@ -1,20 +1,16 @@
+import Navbar from "../Components/Navbar";
 
 
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import HomeMain from '../Components/HomeComponents/HomeMain';
-
-const Home = () => {
-
-
+export default function Home() {
+  console.log("estamos aca");
+  
   return (
- 
-      <HomeMain />
+    
+    <div className="bg-blue-500 text-white p-4 text-center">
 
+     <Navbar/>
+    </div>
+      
    
   );
-};
-
-export default Home;
+}
