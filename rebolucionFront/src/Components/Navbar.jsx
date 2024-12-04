@@ -3,7 +3,7 @@ export default function Navbar() {
   return (
    
       <nav>
-        Hola
+        <h1 className="naranja">HOLAAAAA</h1>
       </nav>
   );
 }

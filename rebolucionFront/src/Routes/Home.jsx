@@ -1,4 +1,3 @@
-import Navbar from "../Components/Navbar";
 
 
 export default function Home() {
@@ -6,11 +5,9 @@ export default function Home() {
   
   return (
     
-    <div className="bg-blue-500 text-white p-4 text-center">
-
-     <Navbar/>
-    </div>
-      
+    <div className="bg-red-500 container text-white p-4 text-center">
+    <h1 className="text-3xl">¡Hola, Tailwind está vivo!</h1>
+  </div>
    
   );
 }
