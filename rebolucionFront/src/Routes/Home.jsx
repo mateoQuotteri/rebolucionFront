@@ -1,3 +1,4 @@
+import HomeImageComponent from "../Components/HomeComponents/HomeImageComponent";
 
 
 export default function Home() {
@@ -5,8 +6,6 @@ export default function Home() {
   
   return (
 
-        <div className="bg-red-500 container text-white p-4 text-center">
-    <h1 className="text-3xl">¡Hola, Tailwind está vivo!</h1>
-  </div>
+       <HomeImageComponent/>
   );
 }
