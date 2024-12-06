@@ -22,3 +22,7 @@
  .back-blanco{
     background-color:  #e3e3e3;
   }
+
+  .width{
+    width: 100vw;
+  }

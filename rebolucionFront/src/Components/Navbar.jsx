@@ -7,7 +7,8 @@ export default function Navbar() {
   };
   return (
    
-<nav className="back-violeta container  w-full flex items-center justify-between p-4 shadow-md" style={{ boxShadow: "0px 4px 25px #ff9002" }}>  
+<nav className="back-violeta w-full flex items-center justify-between p-4 shadow-md"
+style={{ boxShadow: "0px 4px 25px #ff9002" }} >  
     <div className="flex items-center">
       <img
         src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
