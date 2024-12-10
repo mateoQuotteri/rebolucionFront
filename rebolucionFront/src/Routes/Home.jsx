@@ -1,5 +1,7 @@
 import CardHome from "../Components/HomeComponents/CardHome";
 import HomeImageComponent from "../Components/HomeComponents/HomeImageComponent";
+import ButtonSecttionHome from "../Components/HomeComponents/ButtonSectionHome";
+
 
 
 export default function Home() {
@@ -9,6 +11,7 @@ export default function Home() {
     <>
        <HomeImageComponent/>
        <CardHome/>
+       <ButtonSecttionHome/>
        </>
   );
 }
