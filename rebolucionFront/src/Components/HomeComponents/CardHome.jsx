@@ -54,6 +54,9 @@ const CardHome = () => {
             className={`back-blanco rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 p-6 w-full sm:w-[48%] md:w-[30%] lg:w-[23%] flex flex-col items-center ${
               tema.hecho ? "cursor-pointer" : "cursor-not-allowed"
             }`}
+
+                         /*{/*CAMBIAR ACA ESTO}*/
+
             onClick={() => tema.hecho && navigate(`/modulos/${tema.nombre.toLowerCase()}`)}
           >
             <div className="text-5xl mb-4">{tema.icono}</div>
