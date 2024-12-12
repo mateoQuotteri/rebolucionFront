@@ -3,3 +3,8 @@
 @tailwind utilities;
 
 
+input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px #e3e3e3 inset !important; /* Reemplaza con tu color de fondo */
+    -webkit-text-fill-color: #390d40 !important; /* Reemplaza con tu color de texto */
+  }
+  
