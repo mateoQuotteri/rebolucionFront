@@ -6,7 +6,6 @@ import ResumenesHome from "../Components/HomeComponents/ResumenesHome";
 
 
 export default function Home() {
-  console.log("estamos aca");
   
   return (
     <>

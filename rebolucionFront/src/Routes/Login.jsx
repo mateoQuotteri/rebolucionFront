@@ -9,13 +9,14 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
+    console.log("Email:", email,
+       "Contraseña:", password);
   };
 
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (value && !emailRegex.test(value)) {
-      setEmailError("El correo electrónico no es válido.");
+      setEmailError("El correo electrónico no es válido");
     } else {
       setEmailError("");
     }

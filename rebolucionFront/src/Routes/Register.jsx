@@ -25,7 +25,7 @@ const Register = () => {
       nombre: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
       apellido: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
       email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      contra: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}\[\]|;:'",.<>?/]).{8,25}$/,
+      contra: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}\[\]|;:'",.<>?/]).{8,35}$/,
     };
 
     if (!regex[field].test(value)) {
@@ -64,7 +64,7 @@ const Register = () => {
             value={nombre}
             onChange={(e) => handleChange("nombre", e.target.value)}
           />
-          {errors.nombre && <p className="text-red-500 text-sm mt-1">{errors.nombre}</p>}
+          {errors.nombre && <p className="naranja text-sm mt-1">{errors.nombre}</p>}
         </div>
         <div className="mb-4">
           <Input
@@ -73,7 +73,7 @@ const Register = () => {
             value={apellido}
             onChange={(e) => handleChange("apellido", e.target.value)}
           />
-          {errors.apellido && <p className="text-red-500 text-sm mt-1">{errors.apellido}</p>}
+          {errors.apellido && <p className="naranja text-sm mt-1">{errors.apellido}</p>}
         </div>
         <div className="mb-4">
           <Input
@@ -82,7 +82,7 @@ const Register = () => {
             value={email}
             onChange={(e) => handleChange("email", e.target.value)}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && <p className="naranja text-sm mt-1">{errors.email}</p>}
         </div>
         <div className="mb-4">
           <Input
@@ -92,7 +92,7 @@ const Register = () => {
             onChange={(e) => handleChange("contra", e.target.value)}
             toggleVisibility={() => setShowPassword(!showPassword)}
           />
-          {errors.contra && <p className="text-red-500 text-sm mt-1">{errors.contra}</p>}
+          {errors.contra && <p className="naranja text-sm mt-1">{errors.contra}</p>}
         </div>
         <button
           type="submit"
