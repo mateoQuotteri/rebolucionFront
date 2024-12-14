@@ -22,22 +22,22 @@ const Footer = () => {
     <footer className="back-blanco blanco py-4 flex justify-center items-center">
       <div className="flex gap-4">
         <IconLink
-          href="https://youtube.com"
+          href="https://www.youtube.com/@RebolucionLatam"
           icon={YoutubeIcon}
           className="violeta hover:text-naranja"
         />
         <IconLink
-          href="https://spotify.com"
+          href="https://open.spotify.com/show/3EyKX9xEgU0K7WfyWXI9Sr"
           icon={SpotifyIcon}
           className="violeta hover:text-naranja"
         />
         <IconLink
-          href="https://instagram.com"
+          href="https://www.instagram.com/rebolucionlatam/"
           icon={InstagramIcon}
           className="violeta hover:text-naranja"
         />
         <IconLink
-          href="https://tiktok.com"
+          href="https://www.tiktok.com/@rebolucionlatam?_t=8sC9yxzcj2L&_r=1"
           icon={TiktokIcon}
           className="violeta hover:text-naranja"
         />
