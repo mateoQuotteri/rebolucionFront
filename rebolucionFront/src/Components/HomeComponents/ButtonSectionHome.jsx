@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 const ButtonSectionHome = () => {
+    const navigate = useNavigate();
+  
   return (
     <div className="bg-gradient-to-b  back-violeta from-back-naranja to-back-violeta py-16 px-4 text-center">
     <h2 className="text-3xl md:text-4xl font-extrabold naranja mb-8">
@@ -10,7 +13,7 @@ const ButtonSectionHome = () => {
       <button
         className="back-naranja blanco font-bold py-3 px-6 rounded-md shadow-md hover:back-naranja hover:blanco focus:outline-none focus:ring-4 focus:ring-naranja transition"
        
-       /*{/*CAMBIAR ACA ESTO}*/
+       
         onClick={() => navigate('/modulos')}
       >
         Acceder a los módulos

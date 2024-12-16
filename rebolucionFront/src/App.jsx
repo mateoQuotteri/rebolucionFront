@@ -7,6 +7,7 @@ import '../src/Utils/colores.css'
 import './index.css'
 import Layout  from './Layout/Layout'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Modulos from './Routes/Modulos'
 
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>} />
+          <Route path="/modulos" element={<Modulos/>} />
+
 
 
           <Route path="*" element={<h1>No encontramos tu ruta </h1>} />
