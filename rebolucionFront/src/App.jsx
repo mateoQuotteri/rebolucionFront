@@ -8,6 +8,8 @@ import './index.css'
 import Layout  from './Layout/Layout'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Modulos from './Routes/Modulos'
+import EditProfile from './Routes/UserRoutes/EditProfile'
+import EditPassword from './Routes/UserRoutes/EditPassword'
 
 
 function App() {
@@ -22,6 +24,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>} />
           <Route path="/modulos" element={<Modulos/>} />
+          <Route path="/modificar-usuario" element={<EditProfile/>} />
+          <Route path="/modificar-contraseña" element={<EditPassword/>} />
+
 
 
 
