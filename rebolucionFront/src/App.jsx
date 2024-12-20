@@ -10,6 +10,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Modulos from './Routes/Modulos'
 import EditProfile from './Routes/UserRoutes/EditProfile'
 import EditPassword from './Routes/UserRoutes/EditPassword'
+import PanelAdmin from './Routes/AdminRoutes/PanelAdmin'
+import PanelUsers from './Routes/AdminRoutes/PanelUsers'
 
 
 function App() {
@@ -26,6 +28,9 @@ function App() {
           <Route path="/modulos" element={<Modulos/>} />
           <Route path="/modificar-usuario" element={<EditProfile/>} />
           <Route path="/modificar-contraseña" element={<EditPassword/>} />
+          <Route path="/admin/panel" element={<PanelAdmin/>} />
+          <Route path="/admin/usuarios" element={<PanelUsers/>} />
+
 
 
 

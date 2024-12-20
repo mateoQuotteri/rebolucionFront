@@ -19,6 +19,8 @@ const EditProfile = () => {
 
   // Configuración dinámica de los campos
   const fieldsConfig = [
+    { name: "username", label: "Username", type: "text", placeholder: "Nombre de usuario" },
+
     { name: "correo", label: "Correo", type: "email", placeholder: "Correo electrónico" },
     { name: "nombre", label: "Nombre", type: "text", placeholder: "Nombre" },
     { name: "apellido", label: "Apellido", type: "text", placeholder: "Apellido" },
@@ -55,6 +57,7 @@ const EditProfile = () => {
       correo: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       nombre: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
       apellido: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
+      username: /^[a-zA-Z-]{3,}$/,
       edad: /^[1-9][0-9]*$/,
     };
 
