@@ -12,6 +12,7 @@ import EditProfile from './Routes/UserRoutes/EditProfile'
 import EditPassword from './Routes/UserRoutes/EditPassword'
 import PanelAdmin from './Routes/AdminRoutes/PanelAdmin'
 import PanelUsers from './Routes/AdminRoutes/PanelUsers'
+import PanelModulos from './Routes/AdminRoutes/PanelModulos'
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
           <Route path="/modificar-contraseña" element={<EditPassword/>} />
           <Route path="/admin/panel" element={<PanelAdmin/>} />
           <Route path="/admin/usuarios" element={<PanelUsers/>} />
+          <Route path="/admin/modulos" element={<PanelModulos/>} />
+
 
 
 

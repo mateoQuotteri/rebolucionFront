@@ -71,7 +71,7 @@ const PanelUsers = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Administrar Usuarios</h1>
+      <h1 className="text-3xl font-bold blanco mb-6">Administrar Usuarios</h1>
       <table className="table-auto w-full bg-white shadow-md rounded-md">
         <thead>
           <tr className="bg-gray-200 text-left">
