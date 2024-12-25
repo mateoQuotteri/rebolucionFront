@@ -23,7 +23,7 @@ const PanelModulos = () => {
     },
   ]);
 
-  const handleEliminarModulo = (id) => {
+   /* const handleEliminarModulo = (id) => {
     const confirmacion = window.confirm(
       `¿Estás seguro de que querés eliminar el módulo con ID ${id}?`
     );
@@ -33,7 +33,7 @@ const PanelModulos = () => {
     }
   };
 
-  const handleEditarModulo = (id) => {
+const handleEditarModulo = (id) => {
     const modulo = modulos.find((modulo) => modulo.id === id);
     if (modulo) {
       const nuevoNombre = prompt("Ingrese el nuevo nombre del módulo:", modulo.nombre);
@@ -68,7 +68,7 @@ const PanelModulos = () => {
         alert("Todos los campos son obligatorios.");
       }
     }
-  };
+  };*/
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">

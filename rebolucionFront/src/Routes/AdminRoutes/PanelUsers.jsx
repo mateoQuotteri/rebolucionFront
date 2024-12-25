@@ -27,7 +27,7 @@ const PanelUsers = () => {
     },
   ]);
 
-  const handleEliminarUsuario = (id) => {
+  /*const handleEliminarUsuario = (id) => {
     const confirmacion = window.confirm(
       `¿Estás seguro de que querés eliminar al usuario con ID ${id}?`
     );
@@ -67,7 +67,7 @@ const PanelUsers = () => {
     } else {
       alert("Rol inválido. Debe ser ADMIN o USUARIO.");
     }
-  };
+  };*/
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">

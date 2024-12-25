@@ -13,6 +13,8 @@ import EditPassword from './Routes/UserRoutes/EditPassword'
 import PanelAdmin from './Routes/AdminRoutes/PanelAdmin'
 import PanelUsers from './Routes/AdminRoutes/PanelUsers'
 import PanelModulos from './Routes/AdminRoutes/PanelModulos'
+import PanelUnidades from './Routes/AdminRoutes/PanelUnidades'
+import PanelTemas from './Routes/AdminRoutes/PanelTemas'
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
           <Route path="/admin/panel" element={<PanelAdmin/>} />
           <Route path="/admin/usuarios" element={<PanelUsers/>} />
           <Route path="/admin/modulos" element={<PanelModulos/>} />
+          <Route path="/admin/unidades" element={<PanelUnidades/>} />
+          <Route path="/admin/temas" element={<PanelTemas/>} />
 
 
 
