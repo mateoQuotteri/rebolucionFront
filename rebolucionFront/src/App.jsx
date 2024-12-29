@@ -7,7 +7,7 @@ import '../src/Utils/colores.css'
 import './index.css'
 import Layout  from './Layout/Layout'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Modulos from './Routes/Modulos'
+import Modulos from './Routes/ModulosRoutes/Modulos'
 import EditProfile from './Routes/UserRoutes/EditProfile'
 import EditPassword from './Routes/UserRoutes/EditPassword'
 import PanelAdmin from './Routes/AdminRoutes/PanelAdmin'
