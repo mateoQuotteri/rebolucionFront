@@ -15,6 +15,7 @@ import PanelUsers from './Routes/AdminRoutes/PanelUsers'
 import PanelModulos from './Routes/AdminRoutes/PanelModulos'
 import PanelUnidades from './Routes/AdminRoutes/PanelUnidades'
 import PanelTemas from './Routes/AdminRoutes/PanelTemas'
+import ModuloDetail from './Routes/ModulosRoutes/ModuloDetail'
 
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>} />
           <Route path="/modulos" element={<Modulos/>} />
+          <Route path="/modulos/detail" element={<ModuloDetail/>} />
+
           <Route path="/modificar-usuario" element={<EditProfile/>} />
           <Route path="/modificar-contraseña" element={<EditPassword/>} />
           <Route path="/admin/panel" element={<PanelAdmin/>} />
