@@ -25,7 +25,7 @@ const Modulos = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center back-violeta p-6">
-      <h1 className="text-3xl font-bold blanco mb-6">Módulos Disponibles</h1>
+      <h1 className="text-3xl font-bold naranja mb-6">Módulos Disponibles</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
         {modulos.map(({ id, nombre, dificultad, imagen }) => (
           <div

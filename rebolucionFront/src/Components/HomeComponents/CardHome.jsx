@@ -57,7 +57,7 @@ const CardHome = () => {
 
                          /*{/*CAMBIAR ACA ESTO}*/
 
-            onClick={() => tema.hecho && navigate(`/modulos/${tema.nombre.toLowerCase()}`)}
+            onClick={() => tema.hecho && navigate(`/modulos`)}
           >
             <div className="text-5xl mb-4">{tema.icono}</div>
             <h3 className="text-2xl font-bold text-naranja">{tema.nombre}</h3>

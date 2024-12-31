@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import Input from "../Components/UI/InputForm";
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+
+      const navigate = useNavigate();
+  
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [username, setUsername] = useState("");
@@ -145,7 +149,15 @@ const Register = () => {
         >
           Registrarse
         </button>
+
+        <div className="mt-4 text-center">
+          <button className="font-bold naranja hover:underline">Sign in with Google</button>
+        </div>
+        <p className="mt-4 text-center violeta">
+         Si ya tenes cuenta, <a href="/login" className="violeta font-bold hover:underline">inicia sesion</a>
+        </p>
       </form>
+  
     </div>
   );
 };

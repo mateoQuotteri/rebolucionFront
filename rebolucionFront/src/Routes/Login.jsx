@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import Input from "../Components/UI/InputForm";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+
+    const navigate = useNavigate();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -65,7 +69,7 @@ const Login = () => {
           <button className="font-bold naranja hover:underline">Sign in with Google</button>
         </div>
         <p className="mt-4 text-center violeta">
-          Si aún no tienes cuenta, <a href="#" className="violeta font-bold hover:underline">crea una</a>
+          Si aún no tienes cuenta, <a href="/register" className="violeta font-bold hover:underline">crea una</a>
         </p>
       </form>
     </div>
