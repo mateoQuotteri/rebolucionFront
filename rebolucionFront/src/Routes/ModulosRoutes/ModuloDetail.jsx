@@ -1,34 +1,81 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 
 const ModuloDetail = () => {
-  const modulo = {
-    id: 1,
-    nombre: "Bitcoin I",
-    dificultad: 1,
-    profesor: "Satoshi Nakamoto",
-    descripcion: "Introducción a Bitcoin y los fundamentos de la blockchain.",
-    imagen: "https://via.placeholder.com/150",
-  };
+  const { id } = useParams(); // Obtener el id de los parámetros de la URL
 
-  const unidades = [
+  // Datos de prueba (simularían venir de una API o un backend)
+  const modulos = [
     {
-      id: 3,
-      descripcion: "Unidad muy de nazi",
-      nombre: "Unidad nazi",
-      video: "https://www.youtube.com/watch?v=yGLomFODKS0",
+      id: 1,
+      nombre: "Introducción a Bitcoin",
+      dificultad: 2,
+      profesor: "Satoshi Nakamoto",
+      descripcion:
+        "Explorá los fundamentos de Bitcoin, la primera criptomoneda descentralizada.",
+      imagen: "https://via.placeholder.com/600x400",
     },
     {
-      id: 4,
-      descripcion: "Unidad re loca chaval",
-      nombre: "Unidad sobre como jugar al futbol",
-      video: "https://www.youtube.com/watch?v=yGLomFODKS0",
+      id: 2,
+      nombre: "Smart Contracts en Ethereum",
+      dificultad: 3,
+      profesor: "Vitalik Buterin",
+      descripcion:
+        "Aprendé cómo funcionan los contratos inteligentes en Ethereum y su impacto.",
+      imagen: "https://via.placeholder.com/600x400",
     },
   ];
+
+
+  const unidadesPorModulo = {
+    1: [
+      {
+        id: 3,
+        descripcion: "Unidad muy de nazi",
+        nombre: "Unidad nazi",
+        video: "https://www.youtube.com/watch?v=yGLomFODKS0",
+      },
+      {
+        id: 4,
+        descripcion: "Unidad re loca chaval",
+        nombre: "Unidad sobre como jugar al futbol",
+        video: "https://www.youtube.com/watch?v=yGLomFODKS0",
+      },
+    ],
+    2: [
+      {
+        id: 5,
+        descripcion: "Entendé los contratos inteligentes desde cero.",
+        nombre: "Introducción a Smart Contracts",
+        video: "https://www.youtube.com/watch?v=yGLomFODKS0",
+      },
+      {
+        id: 6,
+        descripcion: "Aprendé a crear tu propio contrato inteligente.",
+        nombre: "Creación de Smart Contracts",
+        video: "https://www.youtube.com/watch?v=yGLomFODKS0",
+      },
+    ],
+  };
+
+  // Buscar módulo por ID
+  const modulo = modulos.find((mod) => mod.id === parseInt(id));
+  const unidades = unidadesPorModulo[id] || [];
+
+  if (!modulo) {
+    return (
+      <div className="py-16 px-4 back-violeta">
+        <h1 className="text-3xl font-bold naranja text-center">
+          Módulo no encontrado
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="py-16 px-4 back-violeta">
       {/* Detalle del módulo */}
-      <div className="flex flex-col md:flex-row items-center back-blanco  shadow-lg rounded-lg p-6 mb-8">
+      <div className="flex flex-col md:flex-row items-center back-blanco shadow-lg rounded-lg p-6 mb-8">
         <img
           src={modulo.imagen}
           alt={modulo.nombre}

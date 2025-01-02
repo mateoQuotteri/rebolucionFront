@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Modulos = () => {
+  // Hook para la navegación
+  const navigate = useNavigate();
+
   // Datos de los módulos
   const modulos = [
     {
@@ -23,6 +27,11 @@ const Modulos = () => {
     },
   ];
 
+  // Función para manejar la navegación al módulo específico
+  const handleCardClick = (id) => {
+    navigate(`/modulos/${id}`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center back-violeta p-6">
       <h1 className="text-3xl font-bold naranja mb-6">Módulos Disponibles</h1>
@@ -30,7 +39,8 @@ const Modulos = () => {
         {modulos.map(({ id, nombre, dificultad, imagen }) => (
           <div
             key={id}
-            className="back-blanco rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform"
+            className="back-blanco rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform cursor-pointer"
+            onClick={() => handleCardClick(id)} // Manejo del clic
           >
             <img
               src={imagen}

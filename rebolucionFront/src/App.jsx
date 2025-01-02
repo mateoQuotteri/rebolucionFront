@@ -30,7 +30,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>} />
           <Route path="/modulos" element={<Modulos/>} />
-          <Route path="/modulos/detail" element={<ModuloDetail/>} />
+          <Route path="/modulos/:id" element={<ModuloDetail/>} />
 
           <Route path="/modificar-usuario" element={<EditProfile/>} />
           <Route path="/modificar-contraseña" element={<EditPassword/>} />
