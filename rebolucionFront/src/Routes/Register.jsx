@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import Input from "../Components/UI/InputForm";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
 
-      const navigate = useNavigate();
-  
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [username, setUsername] = useState("");
@@ -52,7 +51,8 @@ const Register = () => {
       if (field === "nombre" || field === "apellido") {
         error = "Debe contener al menos 2 letras y solo caracteres válidos.";
       } else if (field === "username") {
-        error = "Debe tener al menos 3 caracteres y solo puede tener letras o guiones.";
+        error =
+          "Debe tener al menos 3 caracteres y solo puede tener letras o guiones.";
       } else if (field === "email") {
         error = "El correo electrónico no es válido.";
       } else if (field === "contra") {
@@ -73,17 +73,18 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center back-violeta">
-      <img
-        src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
-        alt="Logo"
-        className="w-48 h-auto mb-8"
-      />
+    <div className="min-h-screen flex flex-col items-center justify-center back-violeta  pt-14 pb-20">
+   <img
+  src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
+  alt="Logo"
+  className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
+/>
+
       <form
         onSubmit={handleRegister}
-        className="w-96 p-6 back-blanco rounded-md shadow-md"
+        className="w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] max-w-[468px] p-4 sm:p-6 back-blanco rounded-md shadow-md"
       >
-        <h2 className="text-center violeta text-2xl font-bold mb-4">
+        <h2 className="text-center violeta text-xl sm:text-2xl font-bold mb-4">
           Regístrate
         </h2>
         <div className="mb-4">
@@ -145,19 +146,23 @@ const Register = () => {
         </div>
         <button
           type="submit"
-          className="w-full p-2 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
+          className="w-full p-2 sm:p-3 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
         >
           Registrarse
         </button>
 
         <div className="mt-4 text-center">
-          <button className="font-bold naranja hover:underline">Sign in with Google</button>
+          <button className="font-bold naranja hover:underline">
+            Sign in with Google
+          </button>
         </div>
         <p className="mt-4 text-center violeta">
-         Si ya tenes cuenta, <a href="/login" className="violeta font-bold hover:underline">inicia sesion</a>
+          Si ya tenes cuenta,{" "}
+          <a href="/login" className="violeta font-bold hover:underline">
+            inicia sesion
+          </a>
         </p>
       </form>
-  
     </div>
   );
 };
