@@ -92,24 +92,45 @@ const ModuloDetail = () => {
       {/* Unidades del módulo */}
       <h3 className="text-2xl font-bold text-orange-500 mb-4 text-center">Unidades</h3>
       <div className="flex flex-wrap justify-center gap-6">
-        {unidades.map((unidad) => (
-          <div
-            key={unidad.id}
-            className="bg-gradient-to-b from-orange-400 to-purple-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-[48%] md:w-[30%] lg:w-[23%] flex flex-col"
-          >
-            <h4 className="text-lg font-bold text-white mb-2">{unidad.nombre}</h4>
-            <p className="text-sm text-gray-200 mb-4">{unidad.descripcion}</p>
-            <a
-              href={unidad.video}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-white text-orange-500 font-bold rounded-md hover:bg-opacity-90 text-center"
-            >
-              Ver Video
-            </a>
-          </div>
-        ))}
+  {unidades.map((unidad) => (
+    <div
+      key={unidad.id}
+      className="relative group w-full sm:w-[48%] md:w-[30%] lg:w-[23%] h-[200px]"
+    >
+      {/* Card principal */}
+      <div
+        className="bg-gradient-to-b from-orange-400 to-purple-600 p-6 
+        rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-102 transition-all
+        duration-300 flex flex-col justify-between h-full"
+      >
+        <div>
+          <h4 className="text-lg font-bold text-white mb-2 truncate">{unidad.nombre}</h4>
+          <p className="text-sm text-gray-200 mb-4 line-clamp-2">{unidad.descripcion}</p>
+        </div>
+        <a
+          href={unidad.video}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2 bg-white text-orange-500 font-bold rounded-md hover:bg-opacity-90 text-center"
+        >
+          Ver Video
+        </a>
       </div>
+
+      {/* Overlay que aparece al hover */}
+      <div
+        className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center 
+        opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"
+      >
+        <h4 className="text-xl font-bold text-white text-center">{unidad.nombre}</h4>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
+
     </div>
   );
 };
