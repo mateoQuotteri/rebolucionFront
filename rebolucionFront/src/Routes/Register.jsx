@@ -20,22 +20,54 @@ const Register = () => {
     contra: "",
   });
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log(
-      "Nombre:",
+  
+    // Validar que no haya errores antes de enviar
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (hasErrors) {
+      alert("Por favor, corregí los errores antes de continuar.");
+      return;
+    }
+  
+    const usuario = {
       nombre,
-      "Apellido:",
       apellido,
-      "Username:",
+      correo: email,
       username,
-      "Email:",
-      email,
-      "Contraseña:",
-      contra
-    );
+      contra,
+      rol: "USUARIO", // Por defecto, o podés agregar un campo para elegir el rol
+      pais: null, // Si querés agregarlo en el formulario, reemplazá por el estado correspondiente
+      edad: null,
+      genero: null,
+    };
+  
+    try {
+      const response = await fetch("http://localhost:8080/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(usuario),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Registro exitoso:", data);
+        navigate("/"); // Redirigir al login después de registrar
+      } else {
+        const errorData = await response.json();
+        console.error("Error al registrar usuario:", errorData);
+        alert(
+          errorData.message || "Ocurrió un error al intentar registrar el usuario."
+        );
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      alert("Ocurrió un error en la conexión al servidor.");
+    }
   };
-
+  
   const validateField = (field, value) => {
     let error = "";
     const regex = {
