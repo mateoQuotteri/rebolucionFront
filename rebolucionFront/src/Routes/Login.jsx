@@ -9,10 +9,38 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Para manejar errores
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email, "Contraseña:", password);
+
+    // Objeto UsuarioEntradaDto con los datos requeridos
+    const usuarioEntradaDto = {
+      correo: email,
+      contra: password,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(usuarioEntradaDto),
+      });
+
+      if (response.ok) {
+        console.log("Usuario logueado");
+        navigate("/"); // Redirige al home
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Error al iniciar sesión");
+        console.error("Error:", errorData);
+      }
+    } catch (error) {
+      setErrorMessage("Error de conexión con el servidor");
+      console.error("Error:", error);
+    }
   };
 
   const validateEmail = (value) => {
@@ -32,11 +60,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta">
-    <img
-  src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
-  alt="Logo"
-  className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
-/>
+      <img
+        src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
+        alt="Logo"
+        className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
+      />
 
       <form
         onSubmit={handleLogin}
@@ -63,6 +91,9 @@ const Login = () => {
             toggleVisibility={() => setShowPassword(!showPassword)}
           />
         </div>
+        {errorMessage && (
+          <p className="naranja text-sm mb-4 text-center">{errorMessage}</p>
+        )}
         <button
           type="submit"
           className="w-full p-2 sm:p-3 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
