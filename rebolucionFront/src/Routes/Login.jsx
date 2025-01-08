@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from "../Components/UI/InputForm";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,12 +10,15 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Para manejar errores
+  const [errorMessage, setErrorMessage] = useState(""); 
+  const [loading, setLoading] = useState(false); // Declarar y manejar el estado de carga
+
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // Activar estado de carga
 
-    // Objeto UsuarioEntradaDto con los datos requeridos
     const usuarioEntradaDto = {
       correo: email,
       contra: password,
@@ -30,16 +34,17 @@ const Login = () => {
       });
 
       if (response.ok) {
-        console.log("Usuario logueado");
+        const userData = await response.json();
+        console.log("Usuario logueado:", userData);
         navigate("/"); // Redirige al home
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || "Error al iniciar sesión");
-        console.error("Error:", errorData);
       }
     } catch (error) {
       setErrorMessage("Error de conexión con el servidor");
-      console.error("Error:", error);
+    } finally {
+      setLoading(false); // Desactivar estado de carga
     }
   };
 
@@ -96,9 +101,14 @@ const Login = () => {
         )}
         <button
           type="submit"
-          className="w-full p-2 sm:p-3 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
+          disabled={loading} // Desactiva el botón si está cargando
+          className={`w-full p-2 sm:p-3 rounded-md font-bold ${
+            loading
+              ? "back-naranja cursor-not-allowed opacity-70"
+              : "back-naranja hover:bg-opacity-90"
+          }`}
         >
-          Iniciar sesión
+          {loading ? "Cargando..." : "Iniciar sesión"}
         </button>
         <div className="mt-4 text-center">
           <button className="font-bold naranja hover:underline">

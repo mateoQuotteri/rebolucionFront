@@ -16,6 +16,7 @@ import PanelModulos from './Routes/AdminRoutes/PanelModulos'
 import PanelUnidades from './Routes/AdminRoutes/PanelUnidades'
 import PanelTemas from './Routes/AdminRoutes/PanelTemas'
 import ModuloDetail from './Routes/ModulosRoutes/ModuloDetail'
+import { AuthProvider } from './Context/AuthContext'
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
   return (
     <>
 
+
+    <AuthProvider>
   
       <Routes>
         <Route path="/" element={<Layout />} >
@@ -48,6 +51,7 @@ function App() {
           <Route path="*" element={<h1>No encontramos tu ruta </h1>} />
         </Route>
       </Routes>
+      </AuthProvider>
     </>
   )
 }
