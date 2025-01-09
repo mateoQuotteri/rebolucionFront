@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import ButtonUser from "./UI/ButtonUser";
+import { useAuth } from "../Context/AuthContext"; // Importamos el hook del contexto
 
 export default function Navbar() {
-
+  const { user, isLoggedIn, logout } = useAuth(); // Extraemos los datos necesarios del contexto
 
   return (
     <nav
@@ -22,18 +23,37 @@ export default function Navbar() {
 
       {/* Botones a la derecha */}
       <div className="flex space-x-4">
-        <ButtonUser
-          to="/login"
-          className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
-        >
-          Inicia sesión
-        </ButtonUser>
-        <ButtonUser
-          to="/register"
-          className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
-        >
-          Regístrate
-        </ButtonUser>
+        {isLoggedIn ? (
+          <>
+            <ButtonUser
+              to="/modificar-usuario"
+              className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+            >
+              Modificar Usuario
+            </ButtonUser>
+            <ButtonUser
+              onClick={logout}
+              className="back-orange orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+            >
+              Cerrar Sesión
+            </ButtonUser>
+          </>
+        ) : (
+          <>
+            <ButtonUser
+              to="/login"
+              className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+            >
+              Inicia sesión
+            </ButtonUser>
+            <ButtonUser
+              to="/register"
+              className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+            >
+              Regístrate
+            </ButtonUser>
+          </>
+        )}
       </div>
     </nav>
   );

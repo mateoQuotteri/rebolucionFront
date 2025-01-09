@@ -36,6 +36,7 @@ const Login = () => {
       if (response.ok) {
         const userData = await response.json();
         console.log("Usuario logueado:", userData);
+        login(userData)
         navigate("/"); // Redirige al home
       } else {
         const errorData = await response.json();
