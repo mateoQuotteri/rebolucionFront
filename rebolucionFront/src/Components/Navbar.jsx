@@ -27,28 +27,29 @@ export default function Navbar() {
           <>
             <ButtonUser
               to="/modificar-usuario"
-              className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+              className="back-orange px-2 font-bold py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
             >
               Modificar Usuario
             </ButtonUser>
-            <ButtonUser
-              onClick={logout}
-              className="back-orange orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
-            >
-              Cerrar Sesión
-            </ButtonUser>
+            <button
+  onClick={logout}
+  className="back-naranja text-white font-bold py-2 px-4 rounded hover:bg-orange-600 transition duration-200 shadow-md"
+>
+  Cerrar Sesión
+</button>
+
           </>
         ) : (
           <>
             <ButtonUser
               to="/login"
-              className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+              className="back-orange px-2  font-bold py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
             >
               Inicia sesión
             </ButtonUser>
             <ButtonUser
               to="/register"
-              className="back-orange px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+              className="back-orange px-2 font-bold py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
             >
               Regístrate
             </ButtonUser>

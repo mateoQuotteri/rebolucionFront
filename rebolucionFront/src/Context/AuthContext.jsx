@@ -35,6 +35,8 @@ export const AuthProvider = ({ children }) => {
 
   // Eliminar el estado del usuario de localStorage al cerrar sesión
   const logout = () => {
+    console.log("deslogueo");
+    
     setUser(null);
     setIsLoggedIn(false);
     localStorage.removeItem("jwt");
