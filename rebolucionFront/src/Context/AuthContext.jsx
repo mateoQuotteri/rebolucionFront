@@ -41,6 +41,8 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(false);
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
+    localStorage.removeItem("isLoggedIn");
+
   };
 
   return (

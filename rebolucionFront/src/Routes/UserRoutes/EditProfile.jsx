@@ -3,9 +3,10 @@ import Input from "../../Components/UI/InputForm";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
-  // Simulamos los datos que podrían venir de una API o la base de datos
+  // Estado del formulario
   const [formData, setFormData] = useState({
     correo: "",
     nombre: "",
@@ -17,10 +18,8 @@ const EditProfile = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Configuración dinámica de los campos
+  // Configuración de campos del formulario
   const fieldsConfig = [
-    { name: "username", label: "Username", type: "text", placeholder: "Nombre de usuario" },
-
     { name: "correo", label: "Correo", type: "email", placeholder: "Correo electrónico" },
     { name: "nombre", label: "Nombre", type: "text", placeholder: "Nombre" },
     { name: "apellido", label: "Apellido", type: "text", placeholder: "Apellido" },
@@ -29,35 +28,52 @@ const EditProfile = () => {
     { name: "pais", label: "País", type: "text", placeholder: "País" },
   ];
 
-  // Simulación de fetch de datos de la API
+  // Fetch inicial de datos del usuario
   useEffect(() => {
     const fetchUserData = async () => {
-      const userData = await getUserData(); // Función simulada
-      setFormData(userData);
+      console.log(user);
+      
+      const userData = await getUserData(user.id);
+      setFormData(userData || {});
     };
 
     fetchUserData();
-  }, []);
+  }, [user.id]);
 
-  const getUserData = () => {
-    // Ejemplo: Datos simulados de la BD
-    return Promise.resolve({
-      correo: "usuario@example.com",
-      nombre: "Juan",
-      apellido: "Pérez",
-      edad: 30,
-      genero: "Masculino",
-      pais: "Argentina",
-    });
+  // Función para obtener datos del usuario con JWT
+  const getUserData = (id) => {
+    const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
+
+    console.log(token);
+    console.log(id);
+    
+    
+
+    return fetch(`http://localhost:8080/usuario/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Incluye el token en los headers
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al obtener los datos del usuario");
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos del usuario:", error);
+      });
   };
 
+  // Validación de campos individuales
   const validateField = (field, value) => {
     let error = "";
     const regex = {
       correo: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       nombre: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
       apellido: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
-      username: /^[a-zA-Z-]{3,}$/,
       edad: /^[1-9][0-9]*$/,
     };
 
@@ -73,19 +89,22 @@ const EditProfile = () => {
     setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
+  // Manejo de cambios en el formulario
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
     validateField(field, value);
   };
 
+  // Manejo del envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
     if (Object.values(errors).some((err) => err) || Object.values(formData).some((v) => !v)) {
       alert("Por favor, corrige los errores antes de guardar.");
       return;
     }
+
     console.log("Datos enviados:", formData);
-    // Aquí enviamos la información al backend.
+    // Aquí enviarías los datos al backend
   };
 
   return (
