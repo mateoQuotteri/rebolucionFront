@@ -33,23 +33,14 @@ const EditProfile = () => {
     const fetchUserData = async () => {
       console.log(user);
       
-      const userData = await getUserData(user.id);
-      setFormData(userData || {});
-    };
-
-    fetchUserData();
-  }, [user.id]);
-
-  // Función para obtener datos del usuario con JWT
-  const getUserData = (id) => {
-    const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
+      const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
 
     console.log(token);
-    console.log(id);
+    console.log(user.id);
     
     
 
-    return fetch(`http://localhost:8080/usuario/${id}`, {
+   const userData =  await fetch(`http://localhost:8080/api/admin/usuario/${user.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +56,38 @@ const EditProfile = () => {
       .catch((error) => {
         console.error("Error al obtener los datos del usuario:", error);
       });
-  };
+      setFormData(userData || {});
+    };
+
+    fetchUserData();
+  }, [user.id]);
+
+  // Función para obtener datos del usuario con JWT
+/*  const getUserData = (id) => {
+    const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
+
+    console.log(token);
+    console.log(id);
+    
+    
+
+    return fetch(`http://localhost:8080/api/admin/usuario/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Incluye el token en los headers
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al obtener los datos del usuario");
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos del usuario:", error);
+      });
+  };*/
 
   // Validación de campos individuales
   const validateField = (field, value) => {
