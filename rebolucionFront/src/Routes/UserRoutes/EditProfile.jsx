@@ -40,12 +40,13 @@ const EditProfile = () => {
     
     
 
-   const userData =  await fetch(`http://localhost:8080/api/admin/usuario/${user.id}`, {
+   const userData =  await fetch(`http://localhost:8080/usuario/${user.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`, // Incluye el token en los headers
       },
+      credentials: "include"
     })
       .then((response) => {
         if (!response.ok) {
