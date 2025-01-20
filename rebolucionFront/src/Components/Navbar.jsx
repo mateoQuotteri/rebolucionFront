@@ -3,7 +3,7 @@ import ButtonUser from "./UI/ButtonUser";
 import { useAuth } from "../Context/AuthContext"; // Importamos el hook del contexto
 
 export default function Navbar() {
-  const { user, isLoggedIn, logout } = useAuth(); // Extraemos los datos necesarios del contexto
+  const { isLoggedIn, logout } = useAuth(); // Extraemos los datos necesarios del contexto
 
   return (
     <nav
@@ -22,34 +22,33 @@ export default function Navbar() {
       </div>
 
       {/* Botones a la derecha */}
-      <div className="flex space-x-4">
+      <div className="flex space-x-2">
         {isLoggedIn ? (
           <>
             <ButtonUser
               to="/modificar-usuario"
-              className="back-orange px-2 font-bold py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+              className="back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
             >
-              Modificar Usuario
+              Modificar usuario
             </ButtonUser>
             <button
-  onClick={logout}
-  className="back-naranja text-white font-bold py-2 px-4 rounded hover:bg-orange-600 transition duration-200 shadow-md"
->
-  Cerrar Sesión
-</button>
-
+              onClick={logout}
+              className="back-naranja text-white font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px] hover:bg-orange-600 transition duration-200 shadow-md"
+            >
+              Cerrar sesión
+            </button>
           </>
         ) : (
           <>
             <ButtonUser
               to="/login"
-              className="back-orange px-2  font-bold py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+              className="back-orange px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
             >
               Inicia sesión
             </ButtonUser>
             <ButtonUser
               to="/register"
-              className="back-orange px-2 font-bold py-1 text-xs sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-3 lg:text-base"
+              className="back-orange px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
             >
               Regístrate
             </ButtonUser>

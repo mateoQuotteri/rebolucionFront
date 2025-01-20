@@ -1,11 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import {jwtDecode} from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  
 
   // Cargar el estado del usuario desde localStorage al iniciar la app
   useEffect(() => {
@@ -42,6 +46,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
     localStorage.removeItem("isLoggedIn");
+    navigate(`/`);
 
   };
 
