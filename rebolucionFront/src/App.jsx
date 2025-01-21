@@ -18,6 +18,7 @@ import PanelTemas from './Routes/AdminRoutes/PanelTemas'
 import ModuloDetail from './Routes/ModulosRoutes/ModuloDetail'
 import { AuthProvider } from './Context/AuthContext'
 import PrivateRoute from './Routes/PrivateRoutes'
+import NotFound from './Routes/NotFound'
 
 function App() {
   return (
@@ -30,81 +31,81 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           {/* Rutas protegidas */}
-          <Route 
-            path="/modulos" 
+          <Route
+            path="/modulos"
             element={
               <PrivateRoute>
                 <Modulos />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/modulos/:id" 
+          <Route
+            path="/modulos/:id"
             element={
               <PrivateRoute>
                 <ModuloDetail />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/modificar-usuario" 
+          <Route
+            path="/modificar-usuario"
             element={
               <PrivateRoute>
                 <EditProfile />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/modificar-contraseña" 
+          <Route
+            path="/modificar-contraseña"
             element={
               <PrivateRoute>
                 <EditPassword />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/panel" 
+          <Route
+            path="/admin/panel"
             element={
-              <PrivateRoute>
+              <PrivateRoute requireAdmin={true}>
                 <PanelAdmin />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/usuarios" 
+          <Route
+            path="/admin/usuarios"
             element={
-              <PrivateRoute>
+              <PrivateRoute requireAdmin={true}>
                 <PanelUsers />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/modulos" 
+          <Route
+            path="/admin/modulos"
             element={
-              <PrivateRoute>
+              <PrivateRoute requireAdmin={true}>
                 <PanelModulos />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/unidades" 
+          <Route
+            path="/admin/unidades"
             element={
-              <PrivateRoute>
+              <PrivateRoute requireAdmin={true}>
                 <PanelUnidades />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin/temas" 
+          <Route
+            path="/admin/temas"
             element={
-              <PrivateRoute>
+              <PrivateRoute requireAdmin={true}>
                 <PanelTemas />
               </PrivateRoute>
-            } 
+            }
           />
 
           {/* Ruta para páginas no encontradas */}
-          <Route path="*" element={<h1>No encontramos tu ruta</h1>} />
+          <Route path="*" element={NotFound} />
         </Route>
       </Routes>
     </AuthProvider>

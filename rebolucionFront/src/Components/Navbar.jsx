@@ -1,9 +1,23 @@
 import { Link } from "react-router-dom";
 import ButtonUser from "./UI/ButtonUser";
-import { useAuth } from "../Context/AuthContext"; // Importamos el hook del contexto
+import { useAuth } from "../Context/AuthContext";
+import {jwtDecode} from "jwt-decode"; // Importamos jwt-decode
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAuth(); // Extraemos los datos necesarios del contexto
+
+  // Obtener el rol del usuario desde el token
+  const token = localStorage.getItem("jwt");
+  let isAdmin = false;
+
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      isAdmin = decodedToken.role && decodedToken.role.includes("ADMIN");
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
 
   return (
     <nav
@@ -25,6 +39,14 @@ export default function Navbar() {
       <div className="flex space-x-2">
         {isLoggedIn ? (
           <>
+            {isAdmin && (
+              <ButtonUser
+                to="/admin/panel"
+                className="back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
+              >
+                Panel
+              </ButtonUser>
+            )}
             <ButtonUser
               to="/modificar-usuario"
               className="back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"

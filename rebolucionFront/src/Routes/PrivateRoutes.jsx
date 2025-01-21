@@ -1,18 +1,27 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
-const PrivateRoutes = ({ children }) => {
-  // Verificar si el user y jwt están en localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
+const PrivatesRoute = ({ children, requireAdmin = false }) => {
   const token = localStorage.getItem("jwt");
 
-  // Si no está autenticado, redirige a login
-  if (!user || !token) {
+  if (!token) {
     return <Navigate to="/login" />;
   }
 
-  // Si está autenticado, renderiza el componente hijo
-  return children;
+  try {
+    const decodedToken = jwtDecode(token);
+    const isAdmin = decodedToken.role && decodedToken.role.includes("ADMIN");
+
+    if (requireAdmin && !isAdmin) {
+      return <Navigate to="/" />;
+    }
+
+    return children;
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return <Navigate to="/login" />;
+  }
 };
 
-export default PrivateRoutes;
+export default PrivatesRoute;
