@@ -1,68 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const PanelUnidades = () => {
-  // Simulación de unidades traídas directamente en el front
-  const [unidades, setUnidades] = useState([
-    {
-      id: 1,
-      nombre: "Unidad 1",
-      descripcion: "Introducción al tema",
-      video: "video1.mp4",
-      modulo: { id: 1, nombre: "Módulo 1" },
-    },
-    {
-      id: 2,
-      nombre: "Unidad 2",
-      descripcion: "Profundización del tema",
-      video: "video2.mp4",
-      modulo: { id: 2, nombre: "Módulo 2" },
-    },
-  ]);
-/*
-  const handleEliminarUnidad = (id) => {
-    const confirmacion = window.confirm(
-      `¿Estás seguro de que querés eliminar la unidad con ID ${id}?`
-    );
-    if (confirmacion) {
-      setUnidades(unidades.filter((unidad) => unidad.id !== id));
-      console.log(`Unidad con ID ${id} eliminada`);
-    }
-  };
+  const [unidades, setUnidades] = useState([]);
 
-  const handleEditarUnidad = (id) => {
-    const unidad = unidades.find((unidad) => unidad.id === id);
-    if (unidad) {
-      const nuevoNombre = prompt("Ingrese el nuevo nombre de la unidad:", unidad.nombre);
-      const nuevaDescripcion = prompt(
-        "Ingrese la nueva descripción:",
-        unidad.descripcion
-      );
-      const nuevoVideo = prompt("Ingrese el nuevo video:", unidad.video);
-      const nuevoModuloId = prompt(
-        "Ingrese el nuevo ID del módulo:",
-        unidad.modulo.id
-      );
-
-      if (nuevoNombre && nuevaDescripcion && nuevoVideo && nuevoModuloId) {
-        setUnidades(
-          unidades.map((unidad) =>
-            unidad.id === id
-              ? {
-                  ...unidad,
-                  nombre: nuevoNombre,
-                  descripcion: nuevaDescripcion,
-                  video: nuevoVideo,
-                  modulo: { id: parseInt(nuevoModuloId), nombre: `Módulo ${nuevoModuloId}` },
-                }
-              : unidad
-          )
-        );
-        console.log(`Unidad con ID ${id} actualizada`);
-      } else {
-        alert("Todos los campos son obligatorios.");
+  // Obtener las unidades del backend al cargar el componente
+  useEffect(() => {
+    const fetchUnidades = async () => {
+      try {
+        const jwt = localStorage.getItem("jwt"); // Asumiendo que guardás el JWT en localStorage
+        const response = await fetch("http://localhost:8080/unidades", {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+    
+        if (!response.ok) {
+          throw new Error(`Error al obtener unidades: ${response.statusText}`);
+        }
+    
+        const data = await response.json();
+        const unidadesConModulos = data.map((unidad) => ({
+          ...unidad,
+          modulo: unidad.moduloSalidaDto,
+        }));
+        setUnidades(unidadesConModulos);
+      } catch (error) {
+        console.error("Error al obtener las unidades:", error);
       }
-    }
-  };*/
+    };
+    
+    fetchUnidades();
+  }, []);
+
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
@@ -85,7 +53,7 @@ const PanelUnidades = () => {
               <td className="p-4">{nombre}</td>
               <td className="p-4">{descripcion}</td>
               <td className="p-4">{video}</td>
-              <td className="p-4">{modulo.nombre} (ID: {modulo.id})</td>
+              <td className="p-4">{modulo?.nombre || "Sin módulo"} (ID: {modulo?.id || "N/A"})</td>
               <td className="p-4 flex gap-2">
                 <button
                   onClick={() => handleEliminarUnidad(id)}
