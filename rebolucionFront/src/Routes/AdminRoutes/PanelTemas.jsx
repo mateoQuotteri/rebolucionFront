@@ -1,60 +1,115 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const PanelTemas = () => {
-  const [temas, setTemas] = useState([
-    {
-      id: 1,
-      nombre: "Tema 1",
-      icono: "📘",
-      hecho: true,
-    },
-    {
-      id: 2,
-      nombre: "Tema 2",
-      icono: "📗",
-      hecho: false,
-    },
-  ]);
+  const [temas, setTemas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
- /* const handleEliminarTema = (id) => {
+  // Obtener los temas del backend al cargar el componente
+  useEffect(() => {
+    const fetchTemas = async () => {
+      try {
+        const jwt = localStorage.getItem("jwt"); // Obtenemos el JWT del localStorage
+        const response = await fetch("http://localhost:8080/temas", {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al obtener los temas");
+        }
+
+        const data = await response.json(); // Parseamos el JSON
+        setTemas(data); // Guardamos los temas en el estado
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError("Hubo un problema al cargar los temas.");
+        setLoading(false);
+      }
+    };
+
+    fetchTemas();
+  }, []);
+
+  // Eliminar un tema
+  const handleEliminarTema = async (id) => {
     const confirmacion = window.confirm(
       `¿Estás seguro de que querés eliminar el tema con ID ${id}?`
     );
     if (confirmacion) {
-      setTemas(temas.filter((tema) => tema.id !== id));
-      console.log(`Tema con ID ${id} eliminado`);
+      try {
+        const jwt = localStorage.getItem("jwt");
+        await fetch(`http://localhost:8080/temas/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+
+        setTemas(temas.filter((tema) => tema.id !== id)); // Actualizamos el estado
+        console.log(`Tema con ID ${id} eliminado`);
+      } catch (error) {
+        console.error("Error al eliminar el tema:", error);
+        alert("No se pudo eliminar el tema.");
+      }
     }
   };
 
-  const handleEditarTema = (id) => {
+  // Editar un tema
+  const handleEditarTema = async (id) => {
     const tema = temas.find((tema) => tema.id === id);
     if (tema) {
       const nuevoNombre = prompt("Ingrese el nuevo nombre del tema:", tema.nombre);
       const nuevoIcono = prompt("Ingrese el nuevo ícono del tema:", tema.icono);
-      const nuevoHecho = prompt(
-        "¿Está hecho? (true o false):",
-        tema.hecho
-      );
+      const nuevoHecho = prompt("¿Está hecho? (true o false):", tema.hecho);
 
       if (nuevoNombre && nuevoIcono && nuevoHecho !== null) {
-        setTemas(
-          temas.map((tema) =>
-            tema.id === id
-              ? {
-                  ...tema,
-                  nombre: nuevoNombre,
-                  icono: nuevoIcono,
-                  hecho: nuevoHecho === "true",
-                }
-              : tema
-          )
-        );
-        console.log(`Tema con ID ${id} actualizado`);
+        try {
+          const jwt = localStorage.getItem("jwt");
+          const updatedTema = {
+            ...tema,
+            nombre: nuevoNombre,
+            icono: nuevoIcono,
+            hecho: nuevoHecho === "true",
+          };
+
+          const response = await fetch(`http://localhost:8080/temas/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jwt}`,
+            },
+            body: JSON.stringify(updatedTema),
+          });
+
+          if (!response.ok) {
+            throw new Error("Error al actualizar el tema.");
+          }
+
+          setTemas(
+            temas.map((tema) =>
+              tema.id === id
+                ? { ...tema, nombre: nuevoNombre, icono: nuevoIcono, hecho: nuevoHecho === "true" }
+                : tema
+            )
+          );
+
+          console.log(`Tema con ID ${id} actualizado`);
+        } catch (error) {
+          console.error("Error al actualizar el tema:", error);
+          alert("No se pudo actualizar el tema.");
+        }
       } else {
         alert("Todos los campos son obligatorios.");
       }
     }
-  };*/
+  };
+
+  if (loading) {
+    return <p>Cargando temas...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
