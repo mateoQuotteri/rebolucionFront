@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ButtonUser from "./UI/ButtonUser";
 import { useAuth } from "../Context/AuthContext";
-import {jwtDecode} from "jwt-decode"; // Importamos jwt-decode
+import {jwtDecode} from "jwt-decode"; // Importamos jwt-decode correctamente
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAuth(); // Extraemos los datos necesarios del contexto
@@ -42,7 +42,7 @@ export default function Navbar() {
             {isAdmin && (
               <ButtonUser
                 to="/admin/panel"
-                className="back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
+                className="hidden md:block back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
               >
                 Panel
               </ButtonUser>
