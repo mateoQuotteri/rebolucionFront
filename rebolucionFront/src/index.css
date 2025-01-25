@@ -7,4 +7,14 @@ input:-webkit-autofill {
     box-shadow: 0 0 0px 1000px #e3e3e3 inset !important; /* Reemplaza con tu color de fondo */
     -webkit-text-fill-color: #390d40 !important; /* Reemplaza con tu color de texto */
   }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
   

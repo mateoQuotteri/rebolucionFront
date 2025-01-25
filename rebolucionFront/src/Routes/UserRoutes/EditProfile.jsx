@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Input from "../../Components/UI/InputForm";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const EditProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -31,64 +32,34 @@ const EditProfile = () => {
   // Fetch inicial de datos del usuario
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log(user);
-      
       const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
+      try {
+        const response = await fetch(`http://localhost:8080/usuario/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Incluye el token en los headers
+          },
+          credentials: "include",
+        });
 
-    console.log(token);
-    console.log(user.id);
-    
-    
-
-   const userData =  await fetch(`http://localhost:8080/usuario/${user.id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Incluye el token en los headers
-      },
-      credentials: "include"
-    })
-      .then((response) => {
         if (!response.ok) {
           throw new Error("Error al obtener los datos del usuario");
         }
-        return response.json();
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos del usuario:", error);
-      });
-      setFormData(userData || {});
+
+        const userData = await response.json();
+        setFormData(userData || {});
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al obtener los datos del usuario.",
+        });
+      }
     };
 
     fetchUserData();
   }, [user.id]);
-
-  // Función para obtener datos del usuario con JWT
-/*  const getUserData = (id) => {
-    const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
-
-    console.log(token);
-    console.log(id);
-    
-    
-
-    return fetch(`http://localhost:8080/api/admin/usuario/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Incluye el token en los headers
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos del usuario");
-        }
-        return response.json();
-      })
-      .catch((error) => {
-        console.error("Error al obtener los datos del usuario:", error);
-      });
-  };*/
 
   // Validación de campos individuales
   const validateField = (field, value) => {
@@ -118,16 +89,49 @@ const EditProfile = () => {
     validateField(field, value);
   };
 
-  // Manejo del envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validar campos antes de enviar
     if (Object.values(errors).some((err) => err) || Object.values(formData).some((v) => !v)) {
-      alert("Por favor, corrige los errores antes de guardar.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, corrige los errores antes de guardar.",
+      });
       return;
     }
 
-    console.log("Datos enviados:", formData);
-    // Aquí enviarías los datos al backend
+    const token = localStorage.getItem("jwt");
+    const userId = JSON.parse(atob(token.split(".")[1])).id; // Decodifica el JWT para obtener el ID
+
+    try {
+      const response = await fetch(`http://localhost:8080/modificar-usuario/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Incluye el JWT como header
+        },
+        body: JSON.stringify(formData), // Datos del formulario
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar los datos del usuario");
+      }
+
+      const updatedUser = await response.json();
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: "Perfil actualizado con éxito.",
+      }).then(() => navigate("/modificar-usuario")); // Redirige después de aceptar
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al actualizar los datos.",
+      });
+    }
   };
 
   return (
