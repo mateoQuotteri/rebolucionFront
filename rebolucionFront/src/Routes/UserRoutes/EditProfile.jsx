@@ -24,6 +24,8 @@ const EditProfile = () => {
     { name: "correo", label: "Correo", type: "email", placeholder: "Correo electrónico" },
     { name: "nombre", label: "Nombre", type: "text", placeholder: "Nombre" },
     { name: "apellido", label: "Apellido", type: "text", placeholder: "Apellido" },
+    { name: "username", label: "Username", type: "text", placeholder: "Username" },
+
     { name: "edad", label: "Edad", type: "number", placeholder: "Edad" },
     { name: "genero", label: "Género", type: "text", placeholder: "Género" },
     { name: "pais", label: "País", type: "text", placeholder: "País" },
