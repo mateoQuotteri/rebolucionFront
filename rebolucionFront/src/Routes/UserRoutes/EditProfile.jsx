@@ -15,6 +15,7 @@ const EditProfile = () => {
     edad: "",
     genero: "",
     pais: "",
+    username: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -25,22 +26,26 @@ const EditProfile = () => {
     { name: "nombre", label: "Nombre", type: "text", placeholder: "Nombre" },
     { name: "apellido", label: "Apellido", type: "text", placeholder: "Apellido" },
     { name: "username", label: "Username", type: "text", placeholder: "Username" },
-
     { name: "edad", label: "Edad", type: "number", placeholder: "Edad" },
-    { name: "genero", label: "Género", type: "text", placeholder: "Género" },
+    {
+      name: "genero",
+      label: "Género",
+      type: "select",
+      options: ["", "Masculino", "Femenino"], // Opciones para género
+    },
     { name: "pais", label: "País", type: "text", placeholder: "País" },
   ];
 
   // Fetch inicial de datos del usuario
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("jwt"); // Obtén el JWT del localStorage
+      const token = localStorage.getItem("jwt");
       try {
         const response = await fetch(`http://localhost:8080/usuario/${user.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Incluye el token en los headers
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
@@ -63,29 +68,27 @@ const EditProfile = () => {
     fetchUserData();
   }, [user.id]);
 
-  // Validación de campos individuales
   const validateField = (field, value) => {
     let error = "";
     const regex = {
       correo: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       nombre: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
       apellido: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{2,}$/,
-      edad: /^[1-9][0-9]*$/,
+      username: /^[A-Za-z-]{3,30}$/,
     };
 
     if (regex[field] && !regex[field].test(value)) {
       error =
         field === "correo"
           ? "Correo inválido."
-          : field === "edad"
-          ? "La edad debe ser un número válido."
+          : field === "username"
+          ? "El username debe tener entre 3 y 30 caracteres y solo puede contener letras y guiones."
           : "Debe contener al menos 2 letras.";
     }
 
     setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
-  // Manejo de cambios en el formulario
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
     validateField(field, value);
@@ -94,27 +97,34 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar campos antes de enviar
-    if (Object.values(errors).some((err) => err) || Object.values(formData).some((v) => !v)) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Por favor, corrige los errores antes de guardar.",
-      });
-      return;
+    // Verificar campos obligatorios
+    const requiredFields = ["nombre", "apellido", "correo", "username"];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: "Este campo es obligatorio.",
+        }));
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Por favor, completa los campos obligatorios antes de guardar.",
+        });
+        return;
+      }
     }
 
     const token = localStorage.getItem("jwt");
-    const userId = JSON.parse(atob(token.split(".")[1])).id; // Decodifica el JWT para obtener el ID
+    const userId = JSON.parse(atob(token.split(".")[1])).id;
 
     try {
       const response = await fetch(`http://localhost:8080/modificar-usuario/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Incluye el JWT como header
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData), // Datos del formulario
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -126,7 +136,7 @@ const EditProfile = () => {
         icon: "success",
         title: "¡Éxito!",
         text: "Perfil actualizado con éxito.",
-      }).then(() => navigate("/modificar-usuario")); // Redirige después de aceptar
+      }).then(() => navigate("/modificar-usuario"));
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -140,14 +150,28 @@ const EditProfile = () => {
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta">
       <form onSubmit={handleSubmit} className="w-96 p-6 back-blanco rounded-md shadow-md">
         <h2 className="text-center violeta text-2xl font-bold mb-4">Editar Perfil</h2>
-        {fieldsConfig.map(({ name, label, type, placeholder }) => (
+        {fieldsConfig.map(({ name, label, type, placeholder, options }) => (
           <div className="mb-4" key={name}>
-            <Input
-              type={type}
-              placeholder={placeholder}
-              value={formData[name] || ""}
-              onChange={(e) => handleChange(name, e.target.value)}
-            />
+            {type === "select" ? (
+              <select
+                value={formData[name] || ""}
+                onChange={(e) => handleChange(name, e.target.value)}
+                className="w-full p-2 border rounded-md"
+              >
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option || "Seleccionar"}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <Input
+                type={type}
+                placeholder={placeholder}
+                value={formData[name] || ""}
+                onChange={(e) => handleChange(name, e.target.value)}
+              />
+            )}
             {errors[name] && <p className="text-red-500 text-sm mt-1">{errors[name]}</p>}
           </div>
         ))}
