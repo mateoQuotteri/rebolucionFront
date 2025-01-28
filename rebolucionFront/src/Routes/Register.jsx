@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from "../Components/UI/InputForm";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [contra, setContra] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para "Cargando"
 
   const [errors, setErrors] = useState({
     nombre: "",
@@ -22,27 +24,31 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-  
-    // Validar que no haya errores antes de enviar
+
     const hasErrors = Object.values(errors).some((error) => error !== "");
     if (hasErrors) {
-      alert("Por favor, corregí los errores antes de continuar.");
+      Swal.fire({
+        icon: "error",
+        title: "Errores en el formulario",
+        text: "Corregí los errores antes de continuar.",
+      });
       return;
     }
-  
+
     const usuario = {
       nombre,
       apellido,
       correo: email,
       username,
       contra,
-      rol: "USUARIO", // Por defecto, o podés agregar un campo para elegir el rol
-      pais: null, // Si querés agregarlo en el formulario, reemplazá por el estado correspondiente
+      rol: "USUARIO",
+      pais: null,
       edad: null,
       genero: null,
     };
-  
+
     try {
+      setIsLoading(true); // Activa el estado "Cargando"
       const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: {
@@ -50,24 +56,38 @@ const Register = () => {
         },
         body: JSON.stringify(usuario),
       });
-  
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Registro exitoso:", data);
-        navigate("/"); // Redirigir al login después de registrar
-      } else {
-        const errorData = await response.json();
-        console.error("Error al registrar usuario:", errorData);
-        alert(
-          errorData.message || "Ocurrió un error al intentar registrar el usuario."
-        );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al registrar",
+          text: data.message || "Ocurrió un error al intentar registrar el usuario.",
+        });
+        return;
       }
+
+      Swal.fire({
+        icon: "success",
+        title: "Registro exitoso",
+        text: "El usuario fue registrado correctamente.",
+        showConfirmButton: true,
+        confirmButtonText: "Iniciar sesión",
+      }).then(() => {
+        navigate("/login");
+      });
     } catch (error) {
-      console.error("Error en la solicitud:", error);
-      alert("Ocurrió un error en la conexión al servidor.");
+      Swal.fire({
+        icon: "error",
+        title: "Error en la conexión",
+        text: "Ocurrió un error en la conexión al servidor.",
+      });
+    } finally {
+      setIsLoading(false); // Desactiva el estado "Cargando"
     }
   };
-  
+
   const validateField = (field, value) => {
     let error = "";
     const regex = {
@@ -105,12 +125,12 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center back-violeta  pt-14 pb-20">
-   <img
-  src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
-  alt="Logo"
-  className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
-/>
+    <div className="min-h-screen flex flex-col items-center justify-center back-violeta pt-14 pb-20">
+      <img
+        src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
+        alt="Logo"
+        className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
+      />
 
       <form
         onSubmit={handleRegister}
@@ -119,6 +139,13 @@ const Register = () => {
         <h2 className="text-center violeta text-xl sm:text-2xl font-bold mb-4">
           Regístrate
         </h2>
+
+        {isLoading && (
+          <div className="text-center text-blue-500 font-bold mb-4">
+            Cargando...
+          </div>
+        )}
+
         <div className="mb-4">
           <Input
             type="text"
@@ -179,8 +206,9 @@ const Register = () => {
         <button
           type="submit"
           className="w-full p-2 sm:p-3 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
+          disabled={isLoading} // Deshabilitar mientras carga
         >
-          Registrarse
+          {isLoading ? "Registrando..." : "Registrarse"}
         </button>
 
         <div className="mt-4 text-center">
