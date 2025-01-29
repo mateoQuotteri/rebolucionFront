@@ -18,6 +18,7 @@ import PanelTemas from './Routes/AdminRoutes/PanelTemas'
 import ModuloDetail from './Routes/ModulosRoutes/ModuloDetail'
 import { AuthProvider } from './Context/AuthContext'
 import PrivateRoute from './Routes/PrivateRoutes'
+import NoPermitido  from './Routes/NoPermitido'
 import NotFound from './Routes/NotFound'
 
 function App() {
@@ -103,6 +104,10 @@ function App() {
               </PrivateRoute>
             }
           />
+
+
+
+<Route path="/no-permitido" element={<NoPermitido />} />
 
           {/* Ruta para páginas no encontradas */}
           <Route path="*" element={NotFound} />

@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const PrivatesRoute = ({ children, requireAdmin = false }) => {
   const token = localStorage.getItem("jwt");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   if (!token) {
     return <Navigate to="/login" />;
@@ -15,6 +25,10 @@ const PrivatesRoute = ({ children, requireAdmin = false }) => {
 
     if (requireAdmin && !isAdmin) {
       return <Navigate to="/" />;
+    }
+
+    if (requireAdmin && isMobile) {
+      return <Navigate to="/no-permitido" />;
     }
 
     return children;
