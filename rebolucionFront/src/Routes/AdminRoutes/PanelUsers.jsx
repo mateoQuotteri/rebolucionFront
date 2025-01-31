@@ -4,14 +4,12 @@ const PanelUsers = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Función para obtener el JWT desde el almacenamiento local (localStorage) o cualquier fuente.
   const getToken = () => {
-    return localStorage.getItem("jwt"); // Asegúrate de haber almacenado el token bajo la clave "jwt".
+    return localStorage.getItem("jwt");
   };
 
-  // Función para cargar usuarios desde el backend
   const fetchUsuarios = async () => {
-    const token = getToken(); // Obtener el JWT
+    const token = getToken();
     if (!token) {
       alert("No hay token disponible. Inicia sesión.");
       return;
@@ -22,13 +20,13 @@ const PanelUsers = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Enviar el JWT en el encabezado
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.ok) {
         const data = await response.json();
-        setUsuarios(data); // Actualizar usuarios con los datos recibidos
+        setUsuarios(data);
       } else {
         console.error("Error al obtener los usuarios:", response.statusText);
         alert("No se pudieron cargar los usuarios. Revisa tus permisos.");
@@ -41,7 +39,74 @@ const PanelUsers = () => {
     }
   };
 
-  // useEffect para cargar usuarios al montar el componente
+  const handleChangeRole = async (id, currentRole) => {
+    const newRole = currentRole === "ADMIN" ? "USUARIO" : "ADMIN";
+    const token = getToken();
+
+    if (!token) {
+      alert("No hay token disponible. Inicia sesión.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/admin/modificar-role/${id}/role`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newRole),
+        }
+      );
+
+      if (response.ok) {
+        alert(`Rol cambiado a ${newRole} correctamente`);
+        fetchUsuarios();
+      } else {
+        console.error("Error al cambiar el rol:", response.statusText);
+        alert("No se pudo cambiar el rol.");
+      }
+    } catch (error) {
+      console.error("Error al comunicarse con el backend:", error);
+      alert("Error al cambiar el rol. Inténtalo nuevamente.");
+    }
+  };
+
+  const handleDeleteUser = async (id) => {
+    const token = getToken();
+
+    if (!token) {
+      alert("No hay token disponible. Inicia sesión.");
+      return;
+    }
+
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/admin/eliminar-usuario/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        alert("Usuario eliminado correctamente");
+        fetchUsuarios();
+      } else {
+        console.error("Error al eliminar el usuario:", response.statusText);
+        alert("No se pudo eliminar el usuario.");
+      }
+    } catch (error) {
+      console.error("Error al comunicarse con el backend:", error);
+      alert("Error al eliminar el usuario. Inténtalo nuevamente.");
+    }
+  };
+
   useEffect(() => {
     fetchUsuarios();
   }, []);
@@ -66,32 +131,31 @@ const PanelUsers = () => {
           </tr>
         </thead>
         <tbody>
-  {usuarios.map(({ id, nombre, apellido, correo, username, rol }) => (
-    <tr key={id} className="border-b hover:bg-gray-100">
-      <td className="p-4">{id}</td>
-      <td className="p-4">{nombre}</td>
-      <td className="p-4">{apellido}</td>
-      <td className="p-4">{correo}</td>
-      <td className="p-4">{username}</td>
-      <td className="p-4">{rol}</td>
-      <td className="p-4 flex gap-2">
-        <button
-          onClick={() => console.log("hola")} // Acción al hacer clic en "Eliminar"
-          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-        >
-          Eliminar
-        </button>
-        <button
-          onClick={() => console.log("hola")} // Acción al hacer clic en "Cambiar Rol"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          Cambiar Rol
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+          {usuarios.map(({ id, nombre, apellido, correo, username, rol }) => (
+            <tr key={id} className="border-b hover:bg-gray-100">
+              <td className="p-4">{id}</td>
+              <td className="p-4">{nombre}</td>
+              <td className="p-4">{apellido}</td>
+              <td className="p-4">{correo}</td>
+              <td className="p-4">{username}</td>
+              <td className="p-4">{rol}</td>
+              <td className="p-4 flex gap-2">
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={() => handleChangeRole(id, rol)}
+                >
+                  Cambiar Rol
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={() => handleDeleteUser(id)}
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
