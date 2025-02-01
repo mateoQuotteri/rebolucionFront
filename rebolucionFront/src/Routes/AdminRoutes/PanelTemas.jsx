@@ -5,11 +5,10 @@ const PanelTemas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Obtener los temas del backend al cargar el componente
   useEffect(() => {
     const fetchTemas = async () => {
       try {
-        const jwt = localStorage.getItem("jwt"); // Obtenemos el JWT del localStorage
+        const jwt = localStorage.getItem("jwt");
         const response = await fetch("http://localhost:8080/temas", {
           headers: { Authorization: `Bearer ${jwt}` },
         });
@@ -18,8 +17,8 @@ const PanelTemas = () => {
           throw new Error("Error al obtener los temas");
         }
 
-        const data = await response.json(); // Parseamos el JSON
-        setTemas(data); // Guardamos los temas en el estado
+        const data = await response.json();
+        setTemas(data);
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -31,75 +30,43 @@ const PanelTemas = () => {
     fetchTemas();
   }, []);
 
-  // Eliminar un tema
-  const handleEliminarTema = async (id) => {
-    const confirmacion = window.confirm(
-      `¿Estás seguro de que querés eliminar el tema con ID ${id}?`
-    );
-    if (confirmacion) {
+  const handleAgregarTema = async () => {
+    const nombre = prompt("Ingrese el nombre del tema:");
+    const icono = prompt("Ingrese el ícono del tema:");
+    const hecho = prompt("¿Está hecho? (true o false):");
+
+    if (nombre && icono && hecho !== null) {
       try {
         const jwt = localStorage.getItem("jwt");
-        await fetch(`http://localhost:8080/temas/${id}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${jwt}` },
+        const nuevoTema = {
+          nombre,
+          icono,
+          hecho: hecho === "true",
+        };
+
+        const response = await fetch("http://localhost:8080/temas", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(nuevoTema),
         });
 
-        setTemas(temas.filter((tema) => tema.id !== id)); // Actualizamos el estado
-        console.log(`Tema con ID ${id} eliminado`);
-      } catch (error) {
-        console.error("Error al eliminar el tema:", error);
-        alert("No se pudo eliminar el tema.");
-      }
-    }
-  };
-
-  // Editar un tema
-  const handleEditarTema = async (id) => {
-    const tema = temas.find((tema) => tema.id === id);
-    if (tema) {
-      const nuevoNombre = prompt("Ingrese el nuevo nombre del tema:", tema.nombre);
-      const nuevoIcono = prompt("Ingrese el nuevo ícono del tema:", tema.icono);
-      const nuevoHecho = prompt("¿Está hecho? (true o false):", tema.hecho);
-
-      if (nuevoNombre && nuevoIcono && nuevoHecho !== null) {
-        try {
-          const jwt = localStorage.getItem("jwt");
-          const updatedTema = {
-            ...tema,
-            nombre: nuevoNombre,
-            icono: nuevoIcono,
-            hecho: nuevoHecho === "true",
-          };
-
-          const response = await fetch(`http://localhost:8080/temas/${id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${jwt}`,
-            },
-            body: JSON.stringify(updatedTema),
-          });
-
-          if (!response.ok) {
-            throw new Error("Error al actualizar el tema.");
-          }
-
-          setTemas(
-            temas.map((tema) =>
-              tema.id === id
-                ? { ...tema, nombre: nuevoNombre, icono: nuevoIcono, hecho: nuevoHecho === "true" }
-                : tema
-            )
-          );
-
-          console.log(`Tema con ID ${id} actualizado`);
-        } catch (error) {
-          console.error("Error al actualizar el tema:", error);
-          alert("No se pudo actualizar el tema.");
+        if (!response.ok) {
+          throw new Error("Error al agregar el tema.");
         }
-      } else {
-        alert("Todos los campos son obligatorios.");
+
+        const temaCreado = await response.json();
+        setTemas([...temas, temaCreado]);
+
+        console.log("Tema agregado correctamente");
+      } catch (error) {
+        console.error("Error al agregar el tema:", error);
+        alert("No se pudo agregar el tema.");
       }
+    } else {
+      alert("Todos los campos son obligatorios.");
     }
   };
 
@@ -114,6 +81,15 @@ const PanelTemas = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
       <h1 className="text-3xl font-bold blanco mb-6">Administrar Temas</h1>
+      <div className="w-full flex justify-end mb-4">
+  <button
+    onClick={handleAgregarTema}
+    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+  >
+    Agregar Tema
+  </button>
+</div>
+
       <table className="table-auto w-full bg-white shadow-md rounded-md">
         <thead>
           <tr className="bg-gray-200 text-left">

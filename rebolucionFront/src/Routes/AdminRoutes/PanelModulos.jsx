@@ -7,32 +7,31 @@ const PanelModulos = () => {
 
   const fetchModulos = async () => {
     try {
-      const token = localStorage.getItem("jwt"); // Obtené el JWT del localStorage o de donde lo guardes
+      const token = localStorage.getItem("jwt"); 
       if (!token) {
         throw new Error("No se encontró el token de autenticación");
       }
-  
+
       const response = await fetch("http://localhost:8080/modulos", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Incluimos el token en el encabezado
+          Authorization: `Bearer ${token}`, 
         },
       });
-  
+
       if (!response.ok) {
         throw new Error("Error al obtener los módulos");
       }
-  
+
       const data = await response.json();
-      setModulos(data); // Actualizamos el estado con los datos obtenidos
+      setModulos(data);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchModulos();
@@ -40,7 +39,17 @@ const PanelModulos = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
-      <h1 className="text-3xl font-bold blanco mb-6">Administrar Módulos</h1>
+      {/* Contenedor del título y el botón */}
+      <div className="w-full flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold blanco">Administrar Módulos</h1>
+        <button
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          onClick={() => alert("Abrir formulario para agregar un módulo")}
+        >
+          Agregar un módulo
+        </button>
+      </div>
+
       {loading ? (
         <p className="text-white">Cargando módulos...</p>
       ) : error ? (

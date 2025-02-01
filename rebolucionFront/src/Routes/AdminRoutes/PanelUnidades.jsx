@@ -11,11 +11,11 @@ const PanelUnidades = () => {
         const response = await fetch("http://localhost:8080/unidades", {
           headers: { Authorization: `Bearer ${jwt}` },
         });
-    
+
         if (!response.ok) {
           throw new Error(`Error al obtener unidades: ${response.statusText}`);
         }
-    
+
         const data = await response.json();
         const unidadesConModulos = data.map((unidad) => ({
           ...unidad,
@@ -26,15 +26,18 @@ const PanelUnidades = () => {
         console.error("Error al obtener las unidades:", error);
       }
     };
-    
+
     fetchUnidades();
   }, []);
 
-
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
-      <h1 className="text-3xl font-bold blanco mb-6">Administrar Unidades</h1>
+      <div className="flex justify-between w-full mb-6">
+        <h1 className="text-3xl font-bold blanco">Administrar Unidades</h1>
+        <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+          Agregar una unidad
+        </button>
+      </div>
       <table className="table-auto w-full bg-white shadow-md rounded-md">
         <thead>
           <tr className="bg-gray-200 text-left">
@@ -56,13 +59,13 @@ const PanelUnidades = () => {
               <td className="p-4">{modulo?.nombre || "Sin módulo"} (ID: {modulo?.id || "N/A"})</td>
               <td className="p-4 flex gap-2">
                 <button
-                  onClick={() => handleEliminarUnidad(id)}
+                  onClick={() => alert(`Eliminar unidad con ID ${id}`)}
                   className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                 >
                   Eliminar
                 </button>
                 <button
-                  onClick={() => handleEditarUnidad(id)}
+                  onClick={() => alert(`Editar unidad con ID ${id}`)}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
                   Editar
