@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import FormularioModulo from "./FormsAdmin/FormularioModulo"; // Importamos el formulario
 
 const PanelModulos = () => {
   const [modulos, setModulos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
   const fetchModulos = async () => {
     try {
@@ -39,12 +41,11 @@ const PanelModulos = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
-      {/* Contenedor del título y el botón */}
       <div className="w-full flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold blanco">Administrar Módulos</h1>
         <button
           className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-          onClick={() => alert("Abrir formulario para agregar un módulo")}
+          onClick={() => setMostrarFormulario(true)} // Mostramos el formulario
         >
           Agregar un módulo
         </button>
@@ -96,6 +97,14 @@ const PanelModulos = () => {
             ))}
           </tbody>
         </table>
+      )}
+
+      {/* Renderizar formulario si mostrarFormulario es true */}
+      {mostrarFormulario && (
+        <FormularioModulo 
+          cerrarFormulario={() => setMostrarFormulario(false)}
+          fetchModulos={fetchModulos} // Para recargar la lista tras agregar un módulo
+        />
       )}
     </div>
   );
