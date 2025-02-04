@@ -46,6 +46,10 @@ const PanelModulos = () => {
         throw new Error("No se encontró el token de autenticación");
       }
 
+
+
+
+      
       const response = await fetch(`http://localhost:8080/api/admin/eliminar-modulo/${id}`, {
         method: "DELETE",
         headers: {
