@@ -9,7 +9,7 @@ const PanelModulos = () => {
 
   const fetchModulos = async () => {
     try {
-      const token = localStorage.getItem("jwt"); 
+      const token = localStorage.getItem("jwt");
       if (!token) {
         throw new Error("No se encontró el token de autenticación");
       }
@@ -18,7 +18,7 @@ const PanelModulos = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -35,6 +35,36 @@ const PanelModulos = () => {
     }
   };
 
+  const eliminarModulo = async (id) => {
+    if (!window.confirm(`¿Seguro que querés eliminar el módulo con ID ${id}?`)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación");
+      }
+
+      const response = await fetch(`http://localhost:8080/api/admin/eliminar-modulo/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el módulo");
+      }
+
+      alert("Módulo eliminado correctamente");
+      fetchModulos(); // Recargar la lista después de eliminar
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   useEffect(() => {
     fetchModulos();
   }, []);
@@ -45,7 +75,7 @@ const PanelModulos = () => {
         <h1 className="text-3xl font-bold blanco">Administrar Módulos</h1>
         <button
           className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-          onClick={() => setMostrarFormulario(true)} // Mostramos el formulario
+          onClick={() => setMostrarFormulario(true)}
         >
           Agregar un módulo
         </button>
@@ -81,7 +111,7 @@ const PanelModulos = () => {
                 <td className="p-4">{imagen}</td>
                 <td className="p-4 flex gap-2">
                   <button
-                    onClick={() => alert(`Eliminar módulo con ID ${id}`)}
+                    onClick={() => eliminarModulo(id)}
                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                   >
                     Eliminar
@@ -99,11 +129,10 @@ const PanelModulos = () => {
         </table>
       )}
 
-      {/* Renderizar formulario si mostrarFormulario es true */}
       {mostrarFormulario && (
         <FormularioModulo 
           cerrarFormulario={() => setMostrarFormulario(false)}
-          fetchModulos={fetchModulos} // Para recargar la lista tras agregar un módulo
+          fetchModulos={fetchModulos}
         />
       )}
     </div>
