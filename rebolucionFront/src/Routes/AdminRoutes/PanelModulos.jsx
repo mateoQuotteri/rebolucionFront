@@ -46,10 +46,6 @@ const PanelModulos = () => {
         throw new Error("No se encontró el token de autenticación");
       }
 
-
-
-
-      
       const response = await fetch(`http://localhost:8080/api/admin/eliminar-modulo/${id}`, {
         method: "DELETE",
         headers: {
@@ -134,10 +130,20 @@ const PanelModulos = () => {
       )}
 
       {mostrarFormulario && (
-        <FormularioModulo 
-          cerrarFormulario={() => setMostrarFormulario(false)}
-          fetchModulos={fetchModulos}
-        />
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-md relative">
+            <button
+              className="absolute top-2 right-2 text-red-500"
+              onClick={() => setMostrarFormulario(false)}
+            >
+              ✖
+            </button>
+            <FormularioModulo
+              cerrarFormulario={() => setMostrarFormulario(false)}
+              fetchModulos={fetchModulos}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
