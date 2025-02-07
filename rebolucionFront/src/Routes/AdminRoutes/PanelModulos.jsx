@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import FormularioModulo from "./FormsAdmin/FormularioModulo"; // Importamos el formulario
+import FormularioModulo from "./FormsAdmin/FormularioModulo";
+import FormularioEditarModulo from "./FormsAdmin/FormularioEditarModulo";
 
 const PanelModulos = () => {
   const [modulos, setModulos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarEdicion, setMostrarEdicion] = useState(false);
+  const [moduloSeleccionado, setModuloSeleccionado] = useState(null);
 
   const fetchModulos = async () => {
     try {
@@ -35,6 +38,33 @@ const PanelModulos = () => {
     }
   };
 
+  const fetchModuloDetalles = async (id) => {
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación");
+      }
+
+      const response = await fetch(`http://localhost:8080/modulo/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al obtener los detalles del módulo");
+      }
+
+      const data = await response.json();
+      setModuloSeleccionado(data);
+      setMostrarEdicion(true);
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   const eliminarModulo = async (id) => {
     if (!window.confirm(`¿Seguro que querés eliminar el módulo con ID ${id}?`)) {
       return;
@@ -59,7 +89,7 @@ const PanelModulos = () => {
       }
 
       alert("Módulo eliminado correctamente");
-      fetchModulos(); // Recargar la lista después de eliminar
+      fetchModulos();
     } catch (err) {
       alert(`Error: ${err.message}`);
     }
@@ -117,7 +147,7 @@ const PanelModulos = () => {
                     Eliminar
                   </button>
                   <button
-                    onClick={() => alert(`Editar módulo con ID ${id}`)}
+                    onClick={() => fetchModuloDetalles(id)}
                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   >
                     Editar
@@ -130,20 +160,11 @@ const PanelModulos = () => {
       )}
 
       {mostrarFormulario && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-md shadow-md relative">
-            <button
-              className="absolute top-2 right-2 text-red-500"
-              onClick={() => setMostrarFormulario(false)}
-            >
-              ✖
-            </button>
-            <FormularioModulo
-              cerrarFormulario={() => setMostrarFormulario(false)}
-              fetchModulos={fetchModulos}
-            />
-          </div>
-        </div>
+        <FormularioModulo cerrarFormulario={() => setMostrarFormulario(false)} fetchModulos={fetchModulos} />
+      )}
+
+      {mostrarEdicion && moduloSeleccionado && (
+        <FormularioEditarModulo modulo={moduloSeleccionado} cerrarFormulario={() => setMostrarEdicion(false)} fetchModulos={fetchModulos} />
       )}
     </div>
   );
