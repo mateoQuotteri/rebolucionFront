@@ -127,41 +127,44 @@ const PanelModulos = () => {
               <th className="p-4">Nombre</th>
               <th className="p-4">Dificultad</th>
               <th className="p-4">Profesor</th>
-              <th className="p-4">Tema ID</th>
+              <th className="p-4">Tema ID/Nombre</th>
               <th className="p-4">Descripción</th>
               <th className="p-4">Imagen</th>
               <th className="p-4">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {modulos.map(({ id, nombre, dificultad, profesor, temasalidadto, descripcion, imagen }) => 
-            ( 
-              <tr key={id} className="border-b hover:bg-gray-100">
-                <td className="p-4">{id}</td>
-                <td className="p-4">{nombre}</td>
-                <td className="p-4">{dificultad}</td>
-                <td className="p-4">{profesor}</td>
-                <td className="p-4">{temasalidadto}</td>
-                <td className="p-4">{descripcion}</td>
-                <td className="p-4">{imagen}</td>
-                <td className="p-4 flex gap-2">
-                  <button
-                    onClick={() => eliminarModulo(id)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                  >
-                    Eliminar
-                  </button>
-                  <button
-                    onClick={() => fetchModuloDetalles(id)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                  >
-                    Editar
-                  </button>
-                </td>
-              </tr>
-           
-           ))}
-          </tbody>
+  {modulos.map((modulo) => {
+    console.log(modulo); // Esto imprimirá cada objeto 'modulo' en la consola
+    const { id, nombre, dificultad, profesor, temaSalidaDto, descripcion, imagen } = modulo;
+    return (
+      <tr key={id} className="border-b hover:bg-gray-100">
+        <td className="p-4">{id}</td>
+        <td className="p-4">{nombre}</td>
+        <td className="p-4">{dificultad}</td>
+        <td className="p-4">{profesor}</td>
+        <td className="p-4">{temaSalidaDto.id} ,  {temaSalidaDto.nombre}</td>
+        <td className="p-4">{descripcion}</td>
+        <td className="p-4">{imagen}</td>
+        <td className="p-4 flex gap-2">
+          <button
+            onClick={() => eliminarModulo(id)}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+          >
+            Eliminar
+          </button>
+          <button
+            onClick={() => fetchModuloDetalles(id)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Editar
+          </button>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
         </table>
       )}
 
