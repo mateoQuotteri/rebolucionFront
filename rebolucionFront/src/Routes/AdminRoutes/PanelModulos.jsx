@@ -36,6 +36,8 @@ const PanelModulos = () => {
     } finally {
       setLoading(false);
     }
+    console.log(modulos);
+
   };
 
   const fetchModuloDetalles = async (id) => {
@@ -60,6 +62,8 @@ const PanelModulos = () => {
       const data = await response.json();
       setModuloSeleccionado(data);
       setMostrarEdicion(true);
+      console.log(modulos);
+      
     } catch (err) {
       alert(`Error: ${err.message}`);
     }
@@ -130,13 +134,14 @@ const PanelModulos = () => {
             </tr>
           </thead>
           <tbody>
-            {modulos.map(({ id, nombre, dificultad, profesor, temaId, descripcion, imagen }) => (
+            {modulos.map(({ id, nombre, dificultad, profesor, temasalidadto, descripcion, imagen }) => 
+            ( 
               <tr key={id} className="border-b hover:bg-gray-100">
                 <td className="p-4">{id}</td>
                 <td className="p-4">{nombre}</td>
                 <td className="p-4">{dificultad}</td>
                 <td className="p-4">{profesor}</td>
-                <td className="p-4">{temaId}</td>
+                <td className="p-4">{temasalidadto}</td>
                 <td className="p-4">{descripcion}</td>
                 <td className="p-4">{imagen}</td>
                 <td className="p-4 flex gap-2">
@@ -154,7 +159,8 @@ const PanelModulos = () => {
                   </button>
                 </td>
               </tr>
-            ))}
+           
+           ))}
           </tbody>
         </table>
       )}

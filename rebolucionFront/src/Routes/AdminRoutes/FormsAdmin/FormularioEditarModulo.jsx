@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 
 const FormularioEditarModulo = ({ modulo, cerrarFormulario, fetchModulos }) => {
+
+  
   const [formData, setFormData] = useState({ ...modulo });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
+    
   };
 
   const handleSubmit = async (e) => {
@@ -51,7 +55,7 @@ const FormularioEditarModulo = ({ modulo, cerrarFormulario, fetchModulos }) => {
       
       <input type="text" name="imagen" placeholder="URL de la Imagen" value={formData.imagen} onChange={handleChange} className="w-full p-2 border rounded mb-2" />
       
-      <input type="number" name="temaId" placeholder="ID del Tema" value={formData.temaId} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
+      <input type="number" name="temaId" placeholder="ID del Tema" value={formData.temaSalidaDto.id} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
       
       <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Actualizar Módulo</button>
     </form>
