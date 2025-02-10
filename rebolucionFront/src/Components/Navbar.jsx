@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
 import ButtonUser from "./UI/ButtonUser";
 import { useAuth } from "../Context/AuthContext";
-import {jwtDecode} from "jwt-decode"; // Importamos jwt-decode correctamente
+import {jwtDecode} from "jwt-decode";
 
 export default function Navbar() {
-  const { isLoggedIn, logout } = useAuth(); // Extraemos los datos necesarios del contexto
-
-  // Obtener el rol del usuario desde el token
+  const { isLoggedIn, logout } = useAuth();
+  
   const token = localStorage.getItem("jwt");
   let isAdmin = false;
 
@@ -21,56 +20,69 @@ export default function Navbar() {
 
   return (
     <nav
-      className="back-violeta w-full flex items-center justify-between p-4 shadow-md"
+      className="back-violeta w-full flex flex-col sm:flex-row items-center justify-between p-3 md:p-4 shadow-md gap-3 sm:gap-0"
       style={{ boxShadow: "0px 4px 25px #ff9002" }}
     >
-      {/* Logo que redirige al Home */}
+      {/* Logo */}
       <div className="flex items-center">
         <Link to="/">
           <img
             src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
             alt="Logo"
-            className="h-10 sm:h-12 md:h-16 lg:h-20 cursor-pointer"
+            className="h-12 md:h-16 lg:h-20 cursor-pointer"
           />
         </Link>
       </div>
 
-      {/* Botones a la derecha */}
-      <div className="flex space-x-2">
+      {/* Botones */}
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
         {isLoggedIn ? (
           <>
             {isAdmin && (
               <ButtonUser
                 to="/admin/panel"
-                className="hidden md:block back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
+                className="min-w-[90px] sm:min-w-[100px]"
               >
                 Panel
               </ButtonUser>
             )}
             <ButtonUser
               to="/modificar-usuario"
-              className="back-orange font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
+              className="min-w-[120px] sm:min-w-[140px]"
             >
               Modificar usuario
             </ButtonUser>
             <button
-              onClick={logout}
-              className="back-naranja text-white font-bold px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px] hover:bg-orange-600 transition duration-200 shadow-md"
-            >
-              Cerrar sesión
-            </button>
+  onClick={logout}
+  className="
+    px-3 
+    py-2 md:py-3
+    back-naranja 
+    text-white 
+    rounded-md 
+    font-bold 
+    transition-all 
+    duration-200 
+    hover:opacity-90
+    text-sm md:text-base
+    min-w-[100px] md:min-w-[120px]
+    shadow-md
+  "
+>
+  Cerrar sesión
+</button>
           </>
         ) : (
           <>
             <ButtonUser
               to="/login"
-              className="back-orange px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
+              className="min-w-[100px] sm:min-w-[120px]"
             >
               Inicia sesión
             </ButtonUser>
             <ButtonUser
               to="/register"
-              className="back-orange px-2 py-1 text-xs sm:text-sm lg:text-base rounded w-full sm:max-w-[140px] md:max-w-[200px]"
+              className="min-w-[100px] sm:min-w-[120px]"
             >
               Regístrate
             </ButtonUser>

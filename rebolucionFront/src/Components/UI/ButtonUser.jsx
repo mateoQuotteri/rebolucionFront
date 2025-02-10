@@ -4,14 +4,23 @@ import { useNavigate } from "react-router-dom";
 const ButtonUser = ({ children, to, className }) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(to);
-  };
-
   return (
     <button
-      className={`px-4 py-2 back-naranja text-white rounded ${className}`}
-      onClick={handleClick}
+      className={`
+        px-3 
+        py-2 md:py-3
+        back-naranja 
+        text-white 
+        rounded-md 
+        font-bold 
+        transition-all 
+        duration-200 
+        hover:opacity-90
+        text-sm md:text-base
+        min-w-[100px] md:min-w-[120px]
+        shadow-md
+        ${className}`}
+      onClick={() => navigate(to)}
     >
       {children}
     </button>
