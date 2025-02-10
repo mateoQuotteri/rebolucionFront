@@ -36,8 +36,6 @@ const PanelModulos = () => {
     } finally {
       setLoading(false);
     }
-    console.log(modulos);
-
   };
 
   const fetchModuloDetalles = async (id) => {
@@ -62,38 +60,6 @@ const PanelModulos = () => {
       const data = await response.json();
       setModuloSeleccionado(data);
       setMostrarEdicion(true);
-      console.log(modulos);
-      
-    } catch (err) {
-      alert(`Error: ${err.message}`);
-    }
-  };
-
-  const eliminarModulo = async (id) => {
-    if (!window.confirm(`¿Seguro que querés eliminar el módulo con ID ${id}?`)) {
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("jwt");
-      if (!token) {
-        throw new Error("No se encontró el token de autenticación");
-      }
-
-      const response = await fetch(`http://localhost:8080/api/admin/eliminar-modulo/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al eliminar el módulo");
-      }
-
-      alert("Módulo eliminado correctamente");
-      fetchModulos();
     } catch (err) {
       alert(`Error: ${err.message}`);
     }
@@ -104,7 +70,7 @@ const PanelModulos = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6 relative">
       <div className="w-full flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold blanco">Administrar Módulos</h1>
         <button
@@ -134,46 +100,44 @@ const PanelModulos = () => {
             </tr>
           </thead>
           <tbody>
-  {modulos.map((modulo) => {
-    console.log(modulo); // Esto imprimirá cada objeto 'modulo' en la consola
-    const { id, nombre, dificultad, profesor, temaSalidaDto, descripcion, imagen } = modulo;
-    return (
-      <tr key={id} className="border-b hover:bg-gray-100">
-        <td className="p-4">{id}</td>
-        <td className="p-4">{nombre}</td>
-        <td className="p-4">{dificultad}</td>
-        <td className="p-4">{profesor}</td>
-        <td className="p-4">{temaSalidaDto.id} ,  {temaSalidaDto.nombre}</td>
-        <td className="p-4">{descripcion}</td>
-        <td className="p-4">{imagen}</td>
-        <td className="p-4 flex gap-2">
-          <button
-            onClick={() => eliminarModulo(id)}
-            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-          >
-            Eliminar
-          </button>
-          <button
-            onClick={() => fetchModuloDetalles(id)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Editar
-          </button>
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
-
+            {modulos.map((modulo) => (
+              <tr key={modulo.id} className="border-b hover:bg-gray-100">
+                <td className="p-4">{modulo.id}</td>
+                <td className="p-4">{modulo.nombre}</td>
+                <td className="p-4">{modulo.dificultad}</td>
+                <td className="p-4">{modulo.profesor}</td>
+                <td className="p-4">{modulo.temaSalidaDto.id}, {modulo.temaSalidaDto.nombre}</td>
+                <td className="p-4">{modulo.descripcion}</td>
+                <td className="p-4">{modulo.imagen}</td>
+                <td className="p-4 flex gap-2">
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    onClick={() => fetchModuloDetalles(modulo.id)}
+                  >
+                    Editar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       )}
 
       {mostrarFormulario && (
-        <FormularioModulo cerrarFormulario={() => setMostrarFormulario(false)} fetchModulos={fetchModulos} />
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <FormularioModulo cerrarFormulario={() => setMostrarFormulario(false)} fetchModulos={fetchModulos} />
+        </div>
       )}
 
       {mostrarEdicion && moduloSeleccionado && (
-        <FormularioEditarModulo modulo={moduloSeleccionado} cerrarFormulario={() => setMostrarEdicion(false)} fetchModulos={fetchModulos} />
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <FormularioEditarModulo modulo={moduloSeleccionado} cerrarFormulario={() => setMostrarEdicion(false)} fetchModulos={fetchModulos} />
+        </div>
       )}
     </div>
   );

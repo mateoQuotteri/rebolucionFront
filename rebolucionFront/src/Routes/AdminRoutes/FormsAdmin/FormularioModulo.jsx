@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-const FormularioModulo = ({ onClose }) => {
+const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
   const [formData, setFormData] = useState({
     nombre: "",
     dificultad: "",
     profesor: "",
     descripcion: "",
     imagen: "",
-    temaId: "", // tema_id en la entidad backend
+    temaId: "",
   });
 
   const handleChange = (e) => {
@@ -36,9 +36,8 @@ const FormularioModulo = ({ onClose }) => {
       if (!response.ok) throw new Error("Error al crear el módulo");
 
       alert("Módulo creado con éxito");
-      setFormData({ nombre: "", dificultad: "", profesor: "", descripcion: "", imagen: "", temaId: "" });
-
-      if (onClose) onClose(); // Cierra el formulario si está embebido en un modal
+      await fetchModulos();
+      cerrarFormulario();
     } catch (error) {
       console.error(error);
       alert("Hubo un error al crear el módulo.");
@@ -46,23 +45,109 @@ const FormularioModulo = ({ onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Agregar Nuevo Módulo</h2>
+    <div className="bg-white rounded-lg shadow-md w-full max-w-lg mx-4">
+      <div className="flex justify-between items-center p-3 border-b">
+        <h2 className="text-lg font-bold">Agregar Nuevo Módulo</h2>
+        <button 
+          onClick={cerrarFormulario}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+      </div>
 
-      <input type="text" name="nombre" placeholder="Nombre" value={formData.nombre} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
+      <form onSubmit={handleSubmit} className="p-4">
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <input
+              type="text"
+              name="nombre"
+              placeholder="Nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
 
-      <input type="number" name="dificultad" placeholder="Dificultad (1-10)" value={formData.dificultad} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
+          <div>
+            <input
+              type="number"
+              name="dificultad"
+              placeholder="Dificultad (1-10)"
+              value={formData.dificultad}
+              onChange={handleChange}
+              min="1"
+              max="10"
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
 
-      <input type="text" name="profesor" placeholder="Profesor" value={formData.profesor} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
+          <div>
+            <input
+              type="text"
+              name="profesor"
+              placeholder="Profesor"
+              value={formData.profesor}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
 
-      <textarea name="descripcion" placeholder="Descripción" value={formData.descripcion} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
+          <div>
+            <input
+              type="number"
+              name="temaId"
+              placeholder="ID del Tema"
+              value={formData.temaId}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+        </div>
 
-      <input type="text" name="imagen" placeholder="URL de la Imagen" value={formData.imagen} onChange={handleChange} className="w-full p-2 border rounded mb-2" />
+        <div className="mt-3">
+          <textarea
+            name="descripcion"
+            placeholder="Descripción"
+            value={formData.descripcion}
+            onChange={handleChange}
+            className="w-full p-2 border rounded h-20"
+            required
+          />
+        </div>
 
-      <input type="number" name="temaId" placeholder="ID del Tema" value={formData.temaId} onChange={handleChange} className="w-full p-2 border rounded mb-2" required />
+        <div className="mt-3">
+          <input
+            type="text"
+            name="imagen"
+            placeholder="URL de la Imagen"
+            value={formData.imagen}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
 
-      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Guardar Módulo</button>
-    </form>
+        <div className="mt-4 flex gap-2">
+          <button
+            type="submit"
+            className="flex-1 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            onClick={cerrarFormulario}
+            className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
