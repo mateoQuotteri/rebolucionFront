@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 import FormularioModulo from "./FormsAdmin/FormularioModulo";
 import FormularioEditarModulo from "./FormsAdmin/FormularioEditarModulo";
 
@@ -65,6 +66,74 @@ const PanelModulos = () => {
     }
   };
 
+  const handleEliminarModulo = async (moduloId) => {
+    // Mostrar SweetAlert de confirmación
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      html: `Al eliminar este módulo, se eliminarán <strong>TODAS las unidades relacionadas</strong>. Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    // Si el usuario confirma
+    if (result.isConfirmed) {
+      try {
+        const token = localStorage.getItem("jwt");
+        if (!token) {
+          throw new Error("No estás autenticado");
+        }
+
+        // Primero eliminar unidades del módulo
+        const responseUnidades = await fetch(`http://localhost:8080/api/admin/eliminar-unidad/modulo/${moduloId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!responseUnidades.ok) {
+          throw new Error('Error al eliminar unidades');
+        }
+
+        // Luego eliminar el módulo
+        const responseModulo = await fetch(`http://localhost:8080/api/admin/eliminar-modulo/${moduloId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!responseModulo.ok) {
+          throw new Error('Error al eliminar el módulo');
+        }
+
+        // Mostrar mensaje de éxito
+        Swal.fire(
+          'Eliminado',
+          'El módulo y sus unidades han sido eliminados correctamente.',
+          'success'
+        );
+
+        // Actualizar lista de módulos
+        fetchModulos();
+
+      } catch (error) {
+        // Mostrar error
+        Swal.fire(
+          'Error',
+          error.message,
+          'error'
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     fetchModulos();
   }, []);
@@ -112,6 +181,7 @@ const PanelModulos = () => {
                 <td className="p-4 flex gap-2">
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    onClick={() => handleEliminarModulo(modulo.id)}
                   >
                     Eliminar
                   </button>
