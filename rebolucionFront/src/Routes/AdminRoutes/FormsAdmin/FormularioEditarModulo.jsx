@@ -1,10 +1,24 @@
 import React, { useState } from "react";
+import Swal from 'sweetalert2';
 
 const FormularioEditarModulo = ({ modulo, cerrarFormulario, fetchModulos }) => {
   const [formData, setFormData] = useState({ ...modulo });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // Special handling for nested temaId
+    if (name === 'temaId') {
+      setFormData(prevData => ({
+        ...prevData,
+        temaSalidaDto: {
+          ...prevData.temaSalidaDto,
+          id: value
+        }
+      }));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -12,7 +26,12 @@ const FormularioEditarModulo = ({ modulo, cerrarFormulario, fetchModulos }) => {
 
     const token = localStorage.getItem("jwt");
     if (!token) {
-      alert("No estás autenticado.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No estás autenticado.',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
@@ -28,12 +47,23 @@ const FormularioEditarModulo = ({ modulo, cerrarFormulario, fetchModulos }) => {
 
       if (!response.ok) throw new Error("Error al actualizar el módulo");
 
-      alert("Módulo actualizado con éxito");
-      fetchModulos();
-      cerrarFormulario();
+      Swal.fire({
+        icon: 'success',
+        title: '¡Módulo Actualizado!',
+        text: 'El módulo se ha actualizado correctamente.',
+        confirmButtonColor: '#3085d6'
+      }).then(() => {
+        fetchModulos();
+        cerrarFormulario();
+      });
     } catch (error) {
       console.error(error);
-      alert("Hubo un error al actualizar el módulo.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error al actualizar el módulo.',
+        confirmButtonColor: '#d33'
+      });
     }
   };
 

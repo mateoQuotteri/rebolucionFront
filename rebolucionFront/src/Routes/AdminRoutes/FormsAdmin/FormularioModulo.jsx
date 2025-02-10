@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Swal from 'sweetalert2';
 
 const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,12 @@ const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
 
     const jwt = localStorage.getItem("jwt");
     if (!jwt) {
-      alert("No estás autenticado.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No estás autenticado.',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
@@ -35,12 +41,23 @@ const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
 
       if (!response.ok) throw new Error("Error al crear el módulo");
 
-      alert("Módulo creado con éxito");
-      await fetchModulos();
-      cerrarFormulario();
+      Swal.fire({
+        icon: 'success',
+        title: '¡Módulo Creado!',
+        text: 'El módulo se ha creado correctamente.',
+        confirmButtonColor: '#3085d6'
+      }).then(() => {
+        fetchModulos();
+        cerrarFormulario();
+      });
     } catch (error) {
       console.error(error);
-      alert("Hubo un error al crear el módulo.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error al crear el módulo.',
+        confirmButtonColor: '#d33'
+      });
     }
   };
 
