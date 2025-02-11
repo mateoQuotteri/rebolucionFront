@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 
 const PanelUsers = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -11,7 +12,12 @@ const PanelUsers = () => {
   const fetchUsuarios = async () => {
     const token = getToken();
     if (!token) {
-      alert("No hay token disponible. Inicia sesión.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de autenticación',
+        text: 'No hay token disponible. Inicia sesión.',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
@@ -29,11 +35,21 @@ const PanelUsers = () => {
         setUsuarios(data);
       } else {
         console.error("Error al obtener los usuarios:", response.statusText);
-        alert("No se pudieron cargar los usuarios. Revisa tus permisos.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron cargar los usuarios. Revisa tus permisos.',
+          confirmButtonColor: '#d33'
+        });
       }
     } catch (error) {
       console.error("Error al comunicarse con el backend:", error);
-      alert("Error al cargar los usuarios. Inténtalo nuevamente.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al cargar los usuarios. Inténtalo nuevamente.',
+        confirmButtonColor: '#d33'
+      });
     } finally {
       setLoading(false);
     }
@@ -44,7 +60,12 @@ const PanelUsers = () => {
     const token = getToken();
 
     if (!token) {
-      alert("No hay token disponible. Inicia sesión.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de autenticación',
+        text: 'No hay token disponible. Inicia sesión.',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
@@ -62,15 +83,30 @@ const PanelUsers = () => {
       );
 
       if (response.ok) {
-        alert(`Rol cambiado a ${newRole} correctamente`);
+        Swal.fire({
+          icon: 'success',
+          title: 'Rol actualizado',
+          text: `Rol cambiado a ${newRole} correctamente`,
+          confirmButtonColor: '#3085d6'
+        });
         fetchUsuarios();
       } else {
         console.error("Error al cambiar el rol:", response.statusText);
-        alert("No se pudo cambiar el rol.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo cambiar el rol.',
+          confirmButtonColor: '#d33'
+        });
       }
     } catch (error) {
       console.error("Error al comunicarse con el backend:", error);
-      alert("Error al cambiar el rol. Inténtalo nuevamente.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al cambiar el rol. Inténtalo nuevamente.',
+        confirmButtonColor: '#d33'
+      });
     }
   };
 
@@ -78,11 +114,27 @@ const PanelUsers = () => {
     const token = getToken();
 
     if (!token) {
-      alert("No hay token disponible. Inicia sesión.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de autenticación',
+        text: 'No hay token disponible. Inicia sesión.',
+        confirmButtonColor: '#3085d6'
+      });
       return;
     }
 
-    if (!window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Deseas eliminar este usuario?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) {
       return;
     }
 
@@ -95,15 +147,30 @@ const PanelUsers = () => {
       });
 
       if (response.ok) {
-        alert("Usuario eliminado correctamente");
+        Swal.fire({
+          icon: 'success',
+          title: 'Usuario eliminado',
+          text: 'Usuario eliminado correctamente',
+          confirmButtonColor: '#3085d6'
+        });
         fetchUsuarios();
       } else {
         console.error("Error al eliminar el usuario:", response.statusText);
-        alert("No se pudo eliminar el usuario.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo eliminar el usuario.',
+          confirmButtonColor: '#d33'
+        });
       }
     } catch (error) {
       console.error("Error al comunicarse con el backend:", error);
-      alert("Error al eliminar el usuario. Inténtalo nuevamente.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error al eliminar el usuario. Inténtalo nuevamente.',
+        confirmButtonColor: '#d33'
+      });
     }
   };
 

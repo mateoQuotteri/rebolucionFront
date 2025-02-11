@@ -66,11 +66,13 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta">
+     <a href="/">
       <img
-        src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
+        src="../../public/images/LOGO - REBOLUCION - ORIGINAL-1 BANNER WEB 2500X750.png"
         alt="Logo"
         className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
       />
+      </a>
 
       <form
         onSubmit={handleLogin}
