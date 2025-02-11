@@ -27,7 +27,7 @@ export default function Navbar() {
       <div className="flex items-center">
         <Link to="/">
           <img
-            src="../../public/images/rebolucionLogoWebHeader-removebg-preview.png"
+            src="../../public/images/LOGO - REBOLUCION - ORIGINAL-1 BANNER WEB 2500X750.png"
             alt="Logo"
             className="h-12 md:h-16 lg:h-20 cursor-pointer"
           />
