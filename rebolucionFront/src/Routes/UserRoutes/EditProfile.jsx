@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 const EditProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+  const [countries, setCountries] = useState([]);
 
-  // Estado del formulario
   const [formData, setFormData] = useState({
     correo: "",
     nombre: "",
@@ -20,7 +20,48 @@ const EditProfile = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Configuración de campos del formulario
+  // Fetch countries from API
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/region/South America,North America,Europe');
+        if (!response.ok) {
+          throw new Error('Error al obtener la lista de países');
+        }
+        const data = await response.json();
+        // Filter for Latin American countries and Spain
+        const filteredCountries = data
+          .filter(country => 
+            country.region === "Americas" || 
+            (country.region === "Europe" && country.name.common === "Spain"))
+          .map(country => country.name.common)
+          .sort();
+        setCountries(filteredCountries);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+        // Fallback countries list in case API fails
+        setCountries([
+         "Argentina",
+          "Brasil",
+          "Estados Unidos",
+          "Chile",
+          "Colombia",
+          "Ecuador",
+          "España",
+          "Italia",
+
+          "Mexico",
+          "Paraguay",
+          "Peru",
+          "Uruguay",
+          "Venezuela"
+        ]);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
   const fieldsConfig = [
     { name: "correo", label: "Correo", type: "email", placeholder: "Correo electrónico" },
     { name: "nombre", label: "Nombre", type: "text", placeholder: "Nombre" },
@@ -31,12 +72,19 @@ const EditProfile = () => {
       name: "genero",
       label: "Género",
       type: "select",
-      options: ["", "Masculino", "Femenino"], // Opciones para género
+      placeholder: "Género",
+      options: ["Masculino", "Femenino"],
     },
-    { name: "pais", label: "País", type: "text", placeholder: "País" },
+    {
+      name: "pais",
+      label: "País",
+      type: "select",
+      placeholder: "País",
+      options: countries,
+    },
   ];
 
-  // Fetch inicial de datos del usuario
+  // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("jwt");
@@ -77,7 +125,16 @@ const EditProfile = () => {
       username: /^[A-Za-z-]{3,30}$/,
     };
 
-    if (regex[field] && !regex[field].test(value)) {
+    if (field === 'edad') {
+      const edadNum = parseInt(value);
+      if (isNaN(edadNum) || edadNum < 1 || edadNum > 100) {
+        error = "La edad debe estar entre 1 y 100 años";
+      }
+    } else if (field === 'pais' && value && value !== "") {
+      if (!countries.includes(value)) {
+        error = "País no válido. Seleccione un país de la lista.";
+      }
+    } else if (regex[field] && !regex[field].test(value)) {
       error =
         field === "correo"
           ? "Correo inválido."
@@ -87,31 +144,54 @@ const EditProfile = () => {
     }
 
     setErrors((prev) => ({ ...prev, [field]: error }));
+    return error === "";
   };
 
   const handleChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
-    validateField(field, value);
+    if (field === 'edad') {
+      if (value === '' || (/^\d+$/.test(value) && parseInt(value) <= 100)) {
+        setFormData({ ...formData, [field]: value });
+        validateField(field, value);
+      }
+    } else {
+      setFormData({ ...formData, [field]: value });
+      validateField(field, value);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verificar campos obligatorios
     const requiredFields = ["nombre", "apellido", "correo", "username"];
+    let hasErrors = false;
+
     for (const field of requiredFields) {
       if (!formData[field]) {
         setErrors((prev) => ({
           ...prev,
           [field]: "Este campo es obligatorio.",
         }));
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Por favor, completa los campos obligatorios antes de guardar.",
-        });
-        return;
+        hasErrors = true;
       }
+    }
+
+    if (formData.edad) {
+      const edadError = !validateField('edad', formData.edad);
+      if (edadError) hasErrors = true;
+    }
+
+    if (formData.pais) {
+      const paisError = !validateField('pais', formData.pais);
+      if (paisError) hasErrors = true;
+    }
+
+    if (hasErrors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, revisa los campos con errores antes de guardar.",
+      });
+      return;
     }
 
     const token = localStorage.getItem("jwt");
@@ -158,10 +238,13 @@ const EditProfile = () => {
                 onChange={(e) => handleChange(name, e.target.value)}
                 className="w-full p-2 border rounded-md"
               >
-                {options.map((option) => (
-                  <option key={option} value={option}>
-                    {option || "Seleccionar"}
-                  </option>
+                <option value="">{placeholder}</option>
+                {options && options.map((option) => (
+                  option && (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  )
                 ))}
               </select>
             ) : (
