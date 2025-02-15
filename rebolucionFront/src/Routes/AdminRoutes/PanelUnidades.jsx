@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Swal from 'sweetalert2';
 import FormularioUnidades from "./FormsAdmin/FormularioUnidades";
+import FormularioEditarUnidad from "./FormsAdmin/FormularioEditarUnidad";
 
 const PanelUnidades = () => {
   const [unidades, setUnidades] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarEdicion, setMostrarEdicion] = useState(false);
+  const [unidadSeleccionada, setUnidadSeleccionada] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -93,6 +96,11 @@ const PanelUnidades = () => {
     }
   };
 
+  const handleEditarUnidad = (unidad) => {
+    setUnidadSeleccionada(unidad);
+    setMostrarEdicion(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta p-6">
       <div className="flex justify-between w-full mb-6">
@@ -122,22 +130,22 @@ const PanelUnidades = () => {
             </tr>
           </thead>
           <tbody>
-            {unidades.map(({ id, nombre, descripcion, video, modulo }) => (
-              <tr key={id} className="border-b hover:bg-gray-100">
-                <td className="p-4">{id}</td>
-                <td className="p-4">{nombre}</td>
-                <td className="p-4">{descripcion}</td>
-                <td className="p-4">{video}</td>
-                <td className="p-4">{modulo?.nombre || "Sin módulo"} (ID: {modulo?.id || "N/A"})</td>
+            {unidades.map((unidad) => (
+              <tr key={unidad.id} className="border-b hover:bg-gray-100">
+                <td className="p-4">{unidad.id}</td>
+                <td className="p-4">{unidad.nombre}</td>
+                <td className="p-4">{unidad.descripcion}</td>
+                <td className="p-4">{unidad.video}</td>
+                <td className="p-4">{unidad.modulo?.nombre || "Sin módulo"} (ID: {unidad.modulo?.id || "N/A"})</td>
                 <td className="p-4 flex gap-2">
                   <button
-                    onClick={() => handleEliminarUnidad(id)}
+                    onClick={() => handleEliminarUnidad(unidad.id)}
                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                   >
                     Eliminar
                   </button>
                   <button
-                    onClick={() => alert(`Editar unidad con ID ${id}`)}
+                    onClick={() => handleEditarUnidad(unidad)}
                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   >
                     Editar
@@ -153,6 +161,16 @@ const PanelUnidades = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <FormularioUnidades 
             cerrarFormulario={() => setMostrarFormulario(false)} 
+            fetchUnidades={fetchUnidades} 
+          />
+        </div>
+      )}
+
+      {mostrarEdicion && unidadSeleccionada && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <FormularioEditarUnidad 
+            unidad={unidadSeleccionada}
+            cerrarFormulario={() => setMostrarEdicion(false)} 
             fetchUnidades={fetchUnidades} 
           />
         </div>
