@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 
 const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
@@ -10,6 +10,46 @@ const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
     imagen: "",
     temaId: "",
   });
+
+  const [temas, setTemas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTemas();
+  }, []);
+
+  const fetchTemas = async () => {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/temas", {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTemas(data);
+      } else {
+        throw new Error("Error al cargar los temas");
+      }
+    } catch (error) {
+      console.error("Error al cargar los temas:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudieron cargar los temas.',
+        confirmButtonColor: '#3085d6'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -114,15 +154,21 @@ const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
           </div>
 
           <div>
-            <input
-              type="number"
+            <select
               name="temaId"
-              placeholder="ID del Tema"
               value={formData.temaId}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               required
-            />
+              disabled={loading}
+            >
+              <option value="">Seleccionar Tema</option>
+              {temas.map((tema) => (
+                <option key={tema.id} value={tema.id}>
+                  {tema.nombre}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
