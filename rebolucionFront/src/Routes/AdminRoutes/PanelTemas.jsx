@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FormularioTema from "./FormsAdmin/FormularioTema";
+import FormularioEditarTema from "./FormsAdmin/FormularioEditarTema";
 import Swal from 'sweetalert2';
 
 const PanelTemas = () => {
@@ -7,6 +8,8 @@ const PanelTemas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarFormularioEditar, setMostrarFormularioEditar] = useState(false);
+  const [temaSeleccionado, setTemaSeleccionado] = useState(null);
 
   const fetchTemas = async () => {
     try {
@@ -32,6 +35,11 @@ const PanelTemas = () => {
   useEffect(() => {
     fetchTemas();
   }, []);
+
+  const handleEditarTema = (tema) => {
+    setTemaSeleccionado(tema);
+    setMostrarFormularioEditar(true);
+  };
 
   const handleEliminarTema = async (id) => {
     try {
@@ -92,6 +100,20 @@ const PanelTemas = () => {
         </div>
       )}
 
+      {mostrarFormularioEditar && temaSeleccionado && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <FormularioEditarTema
+            cerrarFormulario={() => {
+              setMostrarFormularioEditar(false);
+              setTemaSeleccionado(null);
+            }}
+            fetchTemas={fetchTemas}
+            temaId={temaSeleccionado.id}
+            temaActual={temaSeleccionado}
+          />
+        </div>
+      )}
+
       <table className="table-auto w-full bg-white shadow-md rounded-md">
         <thead>
           <tr className="bg-gray-200 text-left">
@@ -103,21 +125,21 @@ const PanelTemas = () => {
           </tr>
         </thead>
         <tbody>
-          {temas.map(({ id, nombre, icono, hecho }) => (
-            <tr key={id} className="border-b hover:bg-gray-100">
-              <td className="p-4">{id}</td>
-              <td className="p-4">{nombre}</td>
-              <td className="p-4 text-2xl">{icono}</td>
-              <td className="p-4">{hecho ? "Sí" : "No"}</td>
+          {temas.map((tema) => (
+            <tr key={tema.id} className="border-b hover:bg-gray-100">
+              <td className="p-4">{tema.id}</td>
+              <td className="p-4">{tema.nombre}</td>
+              <td className="p-4 text-2xl">{tema.icono}</td>
+              <td className="p-4">{tema.hecho ? "Sí" : "No"}</td>
               <td className="p-4 flex gap-2">
                 <button
-                  onClick={() => handleEliminarTema(id)}
+                  onClick={() => handleEliminarTema(tema.id)}
                   className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                 >
                   Eliminar
                 </button>
                 <button
-                  onClick={() => handleEditarTema(id)}
+                  onClick={() => handleEditarTema(tema)}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
                   Editar
