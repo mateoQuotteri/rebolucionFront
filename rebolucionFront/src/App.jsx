@@ -107,11 +107,11 @@ function App() {
 
 
 
-<Route path="/no-permitido" element={<NoPermitido />} />
+        </Route>
+          <Route path="/no-permitido" element={<NoPermitido />} />
 
           {/* Ruta para páginas no encontradas */}
-          <Route path="*" element={NotFound} />
-        </Route>
+          <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
   );
