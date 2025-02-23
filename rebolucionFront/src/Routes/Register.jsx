@@ -12,7 +12,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [contra, setContra] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para "Cargando"
+  const [isLoading, setIsLoading] = useState(false);
 
   const [errors, setErrors] = useState({
     nombre: "",
@@ -21,6 +21,10 @@ const Register = () => {
     email: "",
     contra: "",
   });
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -48,7 +52,7 @@ const Register = () => {
     };
 
     try {
-      setIsLoading(true); // Activa el estado "Cargando"
+      setIsLoading(true);
       const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: {
@@ -84,7 +88,7 @@ const Register = () => {
         text: "Ocurrió un error en la conexión al servidor.",
       });
     } finally {
-      setIsLoading(false); // Desactiva el estado "Cargando"
+      setIsLoading(false);
     }
   };
 
@@ -126,13 +130,13 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center back-violeta pt-14 pb-20">
-    <a href="/">
-  <img
-    src="../../public/images/LOGO - REBOLUCION - ORIGINAL-1 BANNER WEB 2500X750.png"
-    alt="Logo"
-    className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
-  />
-</a>
+      <a href="/">
+        <img
+          src="../../public/images/LOGO - REBOLUCION - ORIGINAL-1 BANNER WEB 2500X750.png"
+          alt="Logo"
+          className="w-40 sm:w-44 md:w-48 lg:w-56 h-auto mb-8"
+        />
+      </a>
 
       <form
         onSubmit={handleRegister}
@@ -208,16 +212,34 @@ const Register = () => {
         <button
           type="submit"
           className="w-full p-2 sm:p-3 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
-          disabled={isLoading} // Deshabilitar mientras carga
+          disabled={isLoading}
         >
           {isLoading ? "Registrando..." : "Registrarse"}
         </button>
 
-        <div className="mt-4 text-center">
-          <button className="font-bold naranja hover:underline">
-            Sign in with Google
+        <div className="mt-4">
+          <div className="relative flex items-center justify-center">
+            <div className="border-t border-gray-300 w-full"></div>
+            <span className="bg-white px-2 text-sm text-gray-500">O</span>
+            <div className="border-t border-gray-300 w-full"></div>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-2 p-2 sm:p-3 border border-gray-300 rounded-md font-bold hover:bg-gray-50 transition-colors"
+          >
+            <img
+              src="/images/google-icon.svg"
+              alt="Google icon"
+              className="w-5 h-5"
+            />
+            Continuar con Google
           </button>
         </div>
+
         <p className="mt-4 text-center violeta">
           Si ya tenes cuenta,{" "}
           <a href="/login" className="violeta font-bold hover:underline">

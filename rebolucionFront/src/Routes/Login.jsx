@@ -15,6 +15,10 @@ const Login = () => {
 
   const { login } = useAuth();
 
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  };
+
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!value) {
@@ -45,11 +49,9 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     
-    // Limpiar errores previos
     setEmailError("");
     setPasswordError("");
     
-    // Validar ambos campos antes de hacer la petición
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
     
@@ -79,27 +81,21 @@ const Login = () => {
         login(userData);
         navigate("/");
       } else {
-        // Intentar obtener el mensaje de error del servidor
         try {
           const errorData = await response.text();
           
-          // Verificar si el error contiene "Bad credentials"
           if (errorData.includes("Bad credentials")) {
             setPasswordError("La contraseña es incorrecta");
           } 
-          // Verificar si es un error de usuario no encontrado
           else if (errorData.includes("User not found")) {
             setEmailError("No existe una cuenta con este correo electrónico");
           }
-          // Si el error contiene "disabled"
           else if (errorData.includes("disabled")) {
             setEmailError("Tu cuenta está desactivada. Por favor, contacta con soporte");
           }
-          // Si el error contiene "locked"
           else if (errorData.includes("locked")) {
             setEmailError("Tu cuenta ha sido bloqueada temporalmente por múltiples intentos fallidos");
           }
-          // Para otros tipos de errores
           else {
             setEmailError("Error al intentar iniciar sesión. Por favor, verifica tus credenciales");
           }
@@ -170,28 +166,45 @@ const Login = () => {
           disabled={loading}
           className={`w-full p-2 sm:p-3 rounded-md font-bold ${
             loading
-              ? "back-naranja cursor-not-allowed opacity-70"
-              : "back-naranja hover:bg-opacity-90"
-          }`}
-        >
-          {loading ? "Cargando..." : "Iniciar sesión"}
-        </button>
-        
-        <div className="mt-4 text-center">
-          <button className="font-bold naranja hover:underline">
-            Sign in with Google
-          </button>
+            ? "back-naranja cursor-not-allowed opacity-70"
+            : "back-naranja hover:bg-opacity-90"
+        }`}
+      >
+        {loading ? "Cargando..." : "Iniciar sesión"}
+      </button>
+
+      <div className="mt-4">
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-gray-300 w-full"></div>
+          <span className="bg-white px-2 text-sm text-gray-500">O</span>
+          <div className="border-t border-gray-300 w-full"></div>
         </div>
-        
-        <p className="mt-4 text-center violeta">
-          Si aún no tienes cuenta,{" "}
-          <a href="/register" className="violeta font-bold hover:underline">
-            crea una
-          </a>
-        </p>
-      </form>
-    </div>
-  );
+      </div>
+
+      <div className="mt-4">
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          className="w-full flex items-center justify-center gap-2 p-2 sm:p-3 border border-gray-300 rounded-md font-bold hover:bg-gray-50 transition-colors"
+        >
+          <img
+            src="/images/google-icon.svg"
+            alt="Google icon"
+            className="w-5 h-5"
+          />
+          Continuar con Google
+        </button>
+      </div>
+      
+      <p className="mt-4 text-center violeta">
+        Si aún no tienes cuenta,{" "}
+        <a href="/register" className="violeta font-bold hover:underline">
+          crea una
+        </a>
+      </p>
+    </form>
+  </div>
+);
 };
 
 export default Login;
