@@ -1,12 +1,12 @@
 import './App.css'
+import './Utils/colores.css'
+import './index.css'
+
+// Component imports
 import Home from './Routes/Home'
 import Login from './Routes/Login'
 import Register from './Routes/Register'
-
-import '../src/Utils/colores.css'
-import './index.css'
 import Layout from './Layout/Layout'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Modulos from './Routes/ModulosRoutes/Modulos'
 import EditProfile from './Routes/UserRoutes/EditProfile'
 import EditPassword from './Routes/UserRoutes/EditPassword'
@@ -16,20 +16,47 @@ import PanelModulos from './Routes/AdminRoutes/PanelModulos'
 import PanelUnidades from './Routes/AdminRoutes/PanelUnidades'
 import PanelTemas from './Routes/AdminRoutes/PanelTemas'
 import ModuloDetail from './Routes/ModulosRoutes/ModuloDetail'
+import NoPermitido from './Routes/NoPermitido'
+import NotFound from './Routes/NotFound'
+
+// Context and route utilities
 import { AuthProvider } from './Context/AuthContext'
 import PrivateRoute from './Routes/PrivateRoutes'
-import NoPermitido  from './Routes/NoPermitido'
-import NotFound from './Routes/NotFound'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+
+// OAuth2 handler component
+const OAuth2RedirectHandler = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    
+    if (token) {
+      localStorage.setItem('token', token);
+      navigate('/modulos');
+    } else {
+      navigate('/login');
+    }
+  }, [location, navigate]);
+
+  return <div>Procesando autenticación...</div>;
+};
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
         {/* Rutas públicas */}
-        <Route path="/" element={<Layout />} >
-          <Route path="/" element={<Home />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
+          {/* Ruta OAuth2 */}
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
           {/* Rutas protegidas */}
           <Route
@@ -64,6 +91,8 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          {/* Rutas de administrador */}
           <Route
             path="/admin/panel"
             element={
@@ -104,14 +133,11 @@ function App() {
               </PrivateRoute>
             }
           />
-
-
-
         </Route>
-          <Route path="/no-permitido" element={<NoPermitido />} />
 
-          {/* Ruta para páginas no encontradas */}
-          <Route path="*" element={<NotFound />} />
+        {/* Rutas de error */}
+        <Route path="/no-permitido" element={<NoPermitido />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
   );

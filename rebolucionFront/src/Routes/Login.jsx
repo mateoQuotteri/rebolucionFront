@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../Components/UI/InputForm";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,9 +15,31 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
+  // Maneja el token que viene de Google OAuth2
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    
+    if (token) {
+      // Si hay un token, lo procesamos
+      handleOAuthToken(token);
+    }
+  }, [location]);
+
+  const handleOAuthToken = async (token) => {
+    try {
+      // Asumiendo que el token ya contiene la información del usuario
+      // Si necesitas obtener la información del usuario, podrías hacer otra llamada al backend
+      login({ token }); // Guardamos el token en el contexto de autenticación
+      navigate('/'); // Redirigimos al usuario a la página principal
+    } catch (error) {
+      console.error('Error processing OAuth token:', error);
+      setEmailError('Error al procesar la autenticación con Google');
+    }
+  };
 
   const handleGoogleLogin = () => {
+    // Asegúrate de que esta URL coincida exactamente con la configurada en tu backend
     window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   };
 
@@ -164,47 +188,47 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full p-2 sm:p-3 rounded-md font-bold ${
+          className={`w-full p-2 sm:p-3 rounded-md font-bold blanco ${
             loading
             ? "back-naranja cursor-not-allowed opacity-70"
             : "back-naranja hover:bg-opacity-90"
-        }`}
-      >
-        {loading ? "Cargando..." : "Iniciar sesión"}
-      </button>
-
-      <div className="mt-4">
-        <div className="relative flex items-center justify-center">
-          <div className="border-t border-gray-300 w-full"></div>
-          <span className="bg-white px-2 text-sm text-gray-500">O</span>
-          <div className="border-t border-gray-300 w-full"></div>
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-2 p-2 sm:p-3 border border-gray-300 rounded-md font-bold hover:bg-gray-50 transition-colors"
+          }`}
         >
-          <img
-            src="/images/google-icon.svg"
-            alt="Google icon"
-            className="w-5 h-5"
-          />
-          Continuar con Google
+          {loading ? "Cargando..." : "Iniciar sesión"}
         </button>
-      </div>
-      
-      <p className="mt-4 text-center violeta">
-        Si aún no tienes cuenta,{" "}
-        <a href="/register" className="violeta font-bold hover:underline">
-          crea una
-        </a>
-      </p>
-    </form>
-  </div>
-);
+
+        <div className="mt-4">
+          <div className="relative flex items-center justify-center">
+            <div className="border-t border-gray-300 w-full"></div>
+            <span className="bg-white px-2 text-sm text-gray-500">O</span>
+            <div className="border-t border-gray-300 w-full"></div>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-2 p-2 sm:p-3 border border-gray-300 rounded-md font-bold hover:bg-gray-50 transition-colors"
+          >
+            <img
+              src="/images/google-icon.svg"
+              alt="Google icon"
+              className="w-5 h-5"
+            />
+            Continuar con Google
+          </button>
+        </div>
+        
+        <p className="mt-4 text-center violeta">
+          Si aún no tienes cuenta,{" "}
+          <a href="/register" className="violeta font-bold hover:underline">
+            crea una
+          </a>
+        </p>
+      </form>
+    </div>
+  );
 };
 
 export default Login;

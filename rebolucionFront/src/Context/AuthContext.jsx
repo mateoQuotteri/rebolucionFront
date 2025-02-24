@@ -1,60 +1,106 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  
+  const [auth, setAuth] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-  
 
   // Cargar el estado del usuario desde localStorage al iniciar la app
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUser(storedUser);
-      setIsLoggedIn(true);
+    const token = localStorage.getItem("jwt");
+    
+    if (token) {
+      try {
+        // Decodificar el token
+        const decoded = jwtDecode(token);
+        
+        // Establecer el estado de autenticación
+        setAuth({
+          token,
+          user: {
+            email: decoded.email,
+            name: decoded.name,
+            role: decoded.role
+          }
+        });
+
+        // Establecer el usuario y estado de login
+        setUser(decoded);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Error al decodificar el token:", error);
+        // Limpiar localStorage si hay error
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("user");
+        localStorage.removeItem("isLoggedIn");
+      }
     }
   }, []);
 
-  // Guardar el estado del usuario en localStorage al iniciar sesión
+  // Función de login mejorada
   const login = (jwt) => {
     try {
       // Decodificar el JWT
       const decodedUser = jwtDecode(jwt.token);
 
-      // Guardar los datos decodificados en el estado y en localStorage
+      // Actualizar estados
       setUser(decodedUser);
       setIsLoggedIn(true);
+      setAuth({
+        token: jwt.token,
+        user: {
+          email: decodedUser.email,
+          name: decodedUser.name,
+          role: decodedUser.role
+        }
+      });
 
-      localStorage.setItem("jwt", jwt.token); // Guardar el JWT original
-      localStorage.setItem("user", JSON.stringify(decodedUser)); // Guardar datos del usuario
+      // Guardar en localStorage
+      localStorage.setItem("jwt", jwt.token);
+      localStorage.setItem("user", JSON.stringify(decodedUser));
     } catch (error) {
       console.error("Error al decodificar el JWT:", error);
+      throw error; // Propagar el error para manejarlo en el componente
     }
   };
 
-  // Eliminar el estado del usuario de localStorage al cerrar sesión
+  // Función de logout mejorada
   const logout = () => {
-    console.log("deslogueo");
-    
+    // Limpiar estados
     setUser(null);
+    setAuth(null);
     setIsLoggedIn(false);
+    
+    // Limpiar localStorage
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
     localStorage.removeItem("isLoggedIn");
-    navigate(`/`);
-
+    
+    // Redirigir al inicio
+    navigate('/');
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, logout }}>
+    <AuthContext.Provider 
+      value={{ 
+        user,
+        auth,
+        setAuth,
+        isLoggedIn,
+        login,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+export default AuthContext;
