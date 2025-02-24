@@ -43,32 +43,53 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Función de login mejorada
-  const login = (jwt) => {
+  const login = (data) => {
+    console.log("Ejecutando login con datos:", data);
     try {
+      // Manejar varios formatos posibles
+      let tokenString;
+      if (typeof data === 'string') {
+        tokenString = data;
+        console.log("Token recibido como string");
+      } else if (data.token) {
+        tokenString = data.token;
+        console.log("Token recibido como objeto con propiedad token");
+      } else if (data.jwt) {
+        tokenString = data.jwt;
+        console.log("Token recibido como objeto con propiedad jwt");
+      } else {
+        console.error("Formato de token no reconocido:", data);
+        throw new Error("Formato de token no válido");
+      }
+      
+      console.log("Token a decodificar:", tokenString);
+      
       // Decodificar el JWT
-      const decodedUser = jwtDecode(jwt.token);
-
+      const decodedUser = jwtDecode(tokenString);
+      console.log("Usuario decodificado:", decodedUser);
+  
+      // Guardar en localStorage ANTES de actualizar estados
+      console.log("Guardando token en localStorage");
+      localStorage.setItem("jwt", tokenString);
+      localStorage.setItem("user", JSON.stringify(decodedUser));
+      
       // Actualizar estados
       setUser(decodedUser);
       setIsLoggedIn(true);
       setAuth({
-        token: jwt.token,
-        user: {
-          email: decodedUser.email,
-          name: decodedUser.name,
-          role: decodedUser.role
-        }
+        token: tokenString,
+        user: decodedUser
       });
-
-      // Guardar en localStorage
-      localStorage.setItem("jwt", jwt.token);
-      localStorage.setItem("user", JSON.stringify(decodedUser));
+      
+      console.log("Login completado con éxito");
     } catch (error) {
-      console.error("Error al decodificar el JWT:", error);
-      throw error; // Propagar el error para manejarlo en el componente
+      console.error("Error en proceso de login:", error);
+      throw error;
     }
   };
 
+
+  
   // Función de logout mejorada
   const logout = () => {
     // Limpiar estados

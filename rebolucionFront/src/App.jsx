@@ -18,32 +18,14 @@ import PanelTemas from './Routes/AdminRoutes/PanelTemas'
 import ModuloDetail from './Routes/ModulosRoutes/ModuloDetail'
 import NoPermitido from './Routes/NoPermitido'
 import NotFound from './Routes/NotFound'
-
+import OAuth2RedirectHandler from './Components/LoginAndRegisterComponents/OAuth2RedirectHandler'
 // Context and route utilities
 import { AuthProvider } from './Context/AuthContext'
 import PrivateRoute from './Routes/PrivateRoutes'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
-// OAuth2 handler component
-const OAuth2RedirectHandler = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-    
-    if (token) {
-      localStorage.setItem('token', token);
-      navigate('/modulos');
-    } else {
-      navigate('/login');
-    }
-  }, [location, navigate]);
-
-  return <div>Procesando autenticación...</div>;
-};
 
 function App() {
   return (

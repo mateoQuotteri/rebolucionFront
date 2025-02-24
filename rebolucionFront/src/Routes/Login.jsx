@@ -18,20 +18,20 @@ const Login = () => {
   // Maneja el token que viene de Google OAuth2
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const token = params.get('token');
+    const token = params.get('jwt'); // Cambiado de 'token' a 'jwt' para coincidir con el backend
     
     if (token) {
-      // Si hay un token, lo procesamos
+      console.log("Token JWT encontrado en URL:", token);
       handleOAuthToken(token);
     }
   }, [location]);
 
   const handleOAuthToken = async (token) => {
     try {
-      // Asumiendo que el token ya contiene la información del usuario
-      // Si necesitas obtener la información del usuario, podrías hacer otra llamada al backend
-      login({ token }); // Guardamos el token en el contexto de autenticación
-      navigate('/'); // Redirigimos al usuario a la página principal
+      console.log("Token recibido:", token);
+      console.log("Llamando a login con el token JWT");
+      await login(token); // Pasando directamente el token como string
+      navigate('/');
     } catch (error) {
       console.error('Error processing OAuth token:', error);
       setEmailError('Error al procesar la autenticación con Google');
@@ -39,7 +39,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    // Asegúrate de que esta URL coincida exactamente con la configurada en tu backend
+    console.log("Iniciando redirección a Google Auth");
     window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   };
 
@@ -102,7 +102,12 @@ const Login = () => {
       if (response.ok) {
         const userData = await response.json();
         console.log("Usuario logueado:", userData);
-        login(userData);
+        
+        // Verificar la estructura de la respuesta y extraer el token
+        const token = userData.token || userData.jwt || userData;
+        
+        // Llamar a login con el token
+        await login(token);
         navigate("/");
       } else {
         try {
