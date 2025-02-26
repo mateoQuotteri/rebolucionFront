@@ -7,6 +7,13 @@ const EditProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
+  
+  // Obtén el token JWT
+  const token = localStorage.getItem("jwt");
+  // Decodifica el token para verificar el authProvider
+  const tokenData = token ? JSON.parse(atob(token.split(".")[1])) : {};
+  // Verifica si el proveedor de autenticación es Google
+  const isGoogleUser = tokenData.authProvider === "google";
 
   const [formData, setFormData] = useState({
     correo: "",
@@ -264,13 +271,17 @@ const EditProfile = () => {
         >
           Guardar cambios
         </button>
-        <button
-          type="button"
-          onClick={() => navigate("/modificar-contraseña")}
-          className="w-full p-2 mt-4 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
-        >
-          Editar contraseña
-        </button>
+        
+        {/* Solo muestra el botón de editar contraseña si NO es un usuario de Google */}
+        {!isGoogleUser && (
+          <button
+            type="button"
+            onClick={() => navigate("/modificar-contraseña")}
+            className="w-full p-2 mt-4 back-naranja blanco font-bold rounded-md hover:bg-opacity-90"
+          >
+            Editar contraseña
+          </button>
+        )}
       </form>
     </div>
   );

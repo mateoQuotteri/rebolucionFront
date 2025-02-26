@@ -100,6 +100,8 @@ export const AuthProvider = ({ children }) => {
     // Limpiar localStorage
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
     localStorage.removeItem("isLoggedIn");
     
     // Redirigir al inicio
