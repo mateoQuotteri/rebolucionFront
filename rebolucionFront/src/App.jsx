@@ -21,7 +21,7 @@ import NotFound from './Routes/NotFound'
 import OAuth2RedirectHandler from './Components/LoginAndRegisterComponents/OAuth2RedirectHandler'
 // Context and route utilities
 import { AuthProvider } from './Context/AuthContext'
-import PrivateRoute from './Routes/PrivateRoutes'
+import PrivateRoute from './Routes/PrivateRoute'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
@@ -65,14 +65,15 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/modificar-contraseña"
-            element={
-              <PrivateRoute>
-                <EditPassword />
-              </PrivateRoute>
-            }
-          />
+         <Route
+  path="/modificar-contraseña"
+  element={
+    <PrivateRoute requireNonGoogle={true}>
+      <EditPassword />
+    </PrivateRoute>
+  }
+/>
+
 
           {/* Rutas de administrador */}
           <Route
