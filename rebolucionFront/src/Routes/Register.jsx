@@ -232,7 +232,7 @@ const Register = () => {
             className="w-full flex items-center justify-center gap-2 p-2 sm:p-3 border border-gray-300 rounded-md font-bold hover:bg-gray-50 transition-colors"
           >
             <img
-              src="/images/google-icon.svg"
+              src="../../public/images/IMG_0341-removebg-preview.png"
               alt="Google icon"
               className="w-5 h-5"
             />
