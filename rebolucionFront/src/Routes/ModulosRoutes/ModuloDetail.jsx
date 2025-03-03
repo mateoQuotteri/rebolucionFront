@@ -85,7 +85,7 @@ const ModuloDetail = () => {
           className="w-48 h-48 object-cover rounded-lg mb-4 md:mb-0 md:mr-6"
         />
         <div className="text-center md:text-left">
-          <h2 className="text-3xl font-bold text-orange-500 mb-2">{modulo.nombre}</h2>
+          <h2 className="text-3xl font-bold naranja mb-2">{modulo.nombre}</h2>
           <p className="text-gray-700 mb-2">Profesor: {modulo.profesor}</p>
           <p className="text-gray-700 mb-2">Dificultad: {modulo.dificultad}/10</p>
           <p className="text-gray-600">{modulo.descripcion}</p>
@@ -105,19 +105,19 @@ const ModuloDetail = () => {
             >
               {/* Card principal */}
               <div
-                className="bg-white p-6 rounded-xl shadow-lg h-full flex flex-col justify-between
+                className="back-blanco p-6 rounded-xl shadow-lg h-full flex flex-col justify-between
                 transition-all duration-500 relative z-10 group-hover:translate-y-2"
               >
                 <div className="relative z-10">
-                  <div className="h-1 w-16 bg-orange-500 mb-3 rounded-full"></div>
-                  <h4 className="text-lg font-bold text-purple-800 mb-2 truncate">{unidad.nombre}</h4>
+                  <div className="h-1 w-16 back-naranja mb-3 rounded-full"></div>
+                  <h4 className="text-lg font-bold violeta mb-2 truncate">{unidad.nombre}</h4>
                   <p className="text-sm text-gray-600 mb-4 line-clamp-2">{unidad.descripcion}</p>
                 </div>
                 <a
                   href={unidad.video}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 bg-purple-600 text-white font-bold rounded-md hover:bg-orange-500 
+                  className="p-2 back-violeta blanco font-bold rounded-md hover:back-naranja 
                   transition-colors duration-300 text-center relative z-10"
                 >
                   Ver Video
@@ -125,20 +125,20 @@ const ModuloDetail = () => {
               </div>
 
               {/* Fondo decorativo que se revela en hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-purple-500 to-orange-400 
+              <div className="absolute inset-0 bg-gradient-to-br back-violeta to-[#551f5d] 
               opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Círculos decorativos que se animan en hover */}
-              <div className="absolute -top-16 -right-16 w-32 h-32 bg-orange-400 rounded-full 
+              <div className="absolute -top-16 -right-16 w-32 h-32 back-naranja rounded-full 
               transform group-hover:scale-150 group-hover:translate-y-8 transition-all duration-700 opacity-0 group-hover:opacity-20"></div>
-              <div className="absolute -bottom-16 -left-16 w-32 h-32 bg-purple-700 rounded-full 
+              <div className="absolute -bottom-16 -left-16 w-32 h-32 back-violeta rounded-full 
               transform group-hover:scale-150 group-hover:-translate-y-8 transition-all duration-700 opacity-0 group-hover:opacity-20"></div>
               
               {/* Overlay con información adicional */}
-              <div className="absolute inset-0 bg-gradient-to-t from-purple-900 to-transparent 
+              <div className="absolute inset-0 bg-gradient-to-t from-[#390d40] to-transparent 
               opacity-0 group-hover:opacity-90 transition-all duration-500 flex flex-col justify-end p-6">
-                <h4 className="text-xl font-bold text-white transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">{unidad.nombre}</h4>
-                <p className="text-white text-sm mt-2 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700 delay-100">
+                <h4 className="text-xl font-bold naranja transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">{unidad.nombre}</h4>
+                <p className="blanco text-sm mt-2 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700 delay-100">
                   Haz clic para ver el contenido de esta unidad
                 </p>
               </div>
