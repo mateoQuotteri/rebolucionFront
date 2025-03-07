@@ -44,7 +44,7 @@ const CardHome = () => {
 
   return (
     <div className="bg-gradient-to-b from-back-naranja back-violeta to-back-violeta py-16 px-4">
-      <h2 className="text-3xl md:text-4xl font-extrabold naranja text-center mb-8">
+      <h2 className="text-3xl md:text-4xl font-extrabold blanco text-center mb-8">
         Aprenderás sobre cosas como...
       </h2>
       <div className="flex flex-wrap back-violeta justify-center gap-6 p-6">

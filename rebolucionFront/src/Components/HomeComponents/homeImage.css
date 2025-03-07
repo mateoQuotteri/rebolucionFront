@@ -1,0 +1,27 @@
+.home-image-container {
+  position: relative;
+  width: 100%;
+  height: 300px; /* Altura más pequeña para móvil */
+  overflow: hidden;
+  background-size: cover; /* Usar cover también en móvil */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('/images/HomeImages/MOBILE.jpg');
+  background-color: #4b0082;
+}
+
+/* Media query para tablets */
+@media screen and (min-width: 640px) {
+  .home-image-container {
+    height: 450px; /* Altura intermedia */
+    background-image: url('/images/HomeImages/TABLET.jpg');
+  }
+}
+
+/* Media query para web */
+@media screen and (min-width: 1024px) {
+  .home-image-container {
+    height: 600px; /* Altura completa para web */
+    background-image: url('/images/HomeImages/WEB.jpg');
+  }
+}

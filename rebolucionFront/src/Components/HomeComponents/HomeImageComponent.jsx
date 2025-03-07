@@ -1,16 +1,13 @@
-import React from 'react'
+import React from 'react';
+import './homeImage.css'
+
 
 const HomeImageComponent = () => {
   return (
-    <div className="relative w-full h-[400px] sm:h-[600px] overflow-hidden back-violeta">
-    <img
-      src="../../../public/images/HomeImages/2.png" // Usa una imagen de alta resolución
-      alt="Carrusel"
-      className="absolute w-full h-full object-cover"
-    />
-  </div>
-  
-  )
-}
+    <div className="home-image-container">
+      {/* Sin contenido, la imagen es el fondo */}
+    </div>
+  );
+};
 
-export default HomeImageComponent
+export default HomeImageComponent;
