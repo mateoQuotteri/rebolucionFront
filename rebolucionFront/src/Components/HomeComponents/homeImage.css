@@ -1,7 +1,7 @@
 .home-image-container {
   position: relative;
   width: 100%;
-  height: 300px; /* Altura más pequeña para móvil */
+  height: 200px; /* Altura más pequeña para móvil */
   overflow: hidden;
   background-size: cover; /* Usar cover también en móvil */
   background-position: center;
