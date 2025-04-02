@@ -4,9 +4,23 @@ import { useNavigate } from "react-router-dom";
 const Modulos = () => {
   // Hook para la navegación
   const navigate = useNavigate();
-
   // Estado para los módulos
   const [modulos, setModulos] = useState([]);
+
+  // Función para formatear URLs de Imgur
+  const formatImgurUrl = (url) => {
+    if (!url) return "https://via.placeholder.com/600x400";
+    
+    // Verificar si es una URL de Imgur
+    if (url.includes("imgur.com")) {
+      // Extraer el ID de la imagen
+      const imgurId = url.split("/").pop();
+      // Convertir a URL directa de imagen
+      return `https://i.imgur.com/${imgurId}.jpg`;
+    }
+    
+    return url; // Devolver la URL original si no es de Imgur
+  };
 
   // Función para obtener los datos de los módulos
   const fetchModulos = async () => {
@@ -18,11 +32,9 @@ const Modulos = () => {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`, // Asegúrate de tener un token almacenado
         },
       });
-
       if (!response.ok) {
         throw new Error("Error al obtener los datos de los módulos");
       }
-
       const data = await response.json();
       setModulos(data || []);
     } catch (error) {
@@ -52,9 +64,13 @@ const Modulos = () => {
               onClick={() => handleCardClick(id)} // Manejo del clic
             >
               <img
-                src={imagen || "https://via.placeholder.com/600x400"} // Imagen por defecto si no hay URL
+                src={formatImgurUrl(imagen)}
                 alt={nombre}
                 className="w-full h-48 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://via.placeholder.com/600x400";
+                }}
               />
               <div className="p-4">
                 <h2 className="text-xl font-semibold text-gray-800">{nombre}</h2>
