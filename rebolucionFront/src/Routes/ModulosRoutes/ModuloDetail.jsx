@@ -7,6 +7,21 @@ const ModuloDetail = () => {
   const [unidades, setUnidades] = useState([]);
   const [error, setError] = useState("");
 
+  // Función para formatear URLs de Imgur
+  const formatImgurUrl = (url) => {
+    if (!url) return "https://via.placeholder.com/600x400";
+    
+    // Verificar si es una URL de Imgur
+    if (url.includes("imgur.com")) {
+      // Extraer el ID de la imagen
+      const imgurId = url.split("/").pop();
+      // Convertir a URL directa de imagen
+      return `https://i.imgur.com/${imgurId}.jpg`;
+    }
+    
+    return url; // Devolver la URL original si no es de Imgur
+  };
+
   // Fetch para obtener las unidades por módulo
   const fetchUnidadesPorModulo = async () => {
     try {
@@ -80,9 +95,13 @@ const ModuloDetail = () => {
       {/* Detalle del módulo */}
       <div className="flex flex-col md:flex-row items-center back-blanco shadow-lg rounded-lg p-6 mb-8">
         <img
-          src={modulo.imagen || "https://via.placeholder.com/600x400"}
+          src={formatImgurUrl(modulo.imagen)}
           alt={modulo.nombre}
           className="w-48 h-48 object-cover rounded-lg mb-4 md:mb-0 md:mr-6"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://via.placeholder.com/600x400";
+          }}
         />
         <div className="text-center md:text-left">
           <h2 className="text-3xl font-bold naranja mb-2">{modulo.nombre}</h2>
