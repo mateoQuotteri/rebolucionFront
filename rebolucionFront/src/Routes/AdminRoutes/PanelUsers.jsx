@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
+import { getToken } from "../../utils/auth";
 
 const PanelUsers = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const getToken = () => {
-    return localStorage.getItem("jwt");
-  };
 
   const fetchUsuarios = async () => {
     const token = getToken();

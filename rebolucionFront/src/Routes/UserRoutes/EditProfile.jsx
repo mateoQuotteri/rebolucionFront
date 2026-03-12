@@ -2,18 +2,16 @@ import React, { useState, useEffect } from "react";
 import Input from "../../Components/UI/InputForm";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useAuth } from "../../Context/AuthContext";
+import { getToken } from "../../utils/auth";
 
 const EditProfile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
-  
-  // Obtén el token JWT
-  const token = localStorage.getItem("jwt");
-  // Decodifica el token para verificar el authProvider
-  const tokenData = token ? JSON.parse(atob(token.split(".")[1])) : {};
-  // Verifica si el proveedor de autenticación es Google
-  const isGoogleUser = tokenData.authProvider === "google";
+
+  const token = getToken();
+  const isGoogleUser = user?.authProvider === "google";
 
   const [formData, setFormData] = useState({
     correo: "",
@@ -94,7 +92,7 @@ const EditProfile = () => {
   // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("jwt");
+      const token = getToken();
       try {
         const response = await fetch(`http://localhost:8080/usuario/${user.id}`, {
           method: "GET",
@@ -201,8 +199,8 @@ const EditProfile = () => {
       return;
     }
 
-    const token = localStorage.getItem("jwt");
-    const userId = JSON.parse(atob(token.split(".")[1])).id;
+    const token = getToken();
+    const userId = user?.id;
 
     try {
       const response = await fetch(`http://localhost:8080/modificar-usuario/${userId}`, {

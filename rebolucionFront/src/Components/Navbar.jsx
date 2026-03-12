@@ -1,22 +1,11 @@
 import { Link } from "react-router-dom";
 import ButtonUser from "./UI/ButtonUser";
 import { useAuth } from "../Context/AuthContext";
-import { jwtDecode } from "jwt-decode";
 
 export default function Navbar() {
-  const { isLoggedIn, logout } = useAuth();
-  
-  const token = localStorage.getItem("jwt");
-  let isAdmin = false;
+  const { isLoggedIn, logout, user } = useAuth();
 
-  if (token) {
-    try {
-      const decodedToken = jwtDecode(token);
-      isAdmin = decodedToken.role && decodedToken.role.includes("ADMIN");
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  }
+  const isAdmin = user?.role && user.role.includes("ADMIN");
 
   return (
     <nav

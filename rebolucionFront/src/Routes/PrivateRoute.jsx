@@ -1,56 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { getToken } from "../utils/auth";
 
 const PrivateRoute = ({ children, requireAdmin = false, requireNonGoogle = false }) => {
-  const token = localStorage.getItem("jwt");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const location = useLocation();
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // getToken() ya valida expiración — retorna null si el token expiró
+  const token = getToken();
+
   if (!token) {
-    console.log("🔴 No hay token en localStorage. Redirigiendo a login...");
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   try {
     const decodedToken = jwtDecode(token);
-    console.log("🔍 Token decodificado:", decodedToken);
-
     const isAdmin = decodedToken.role && decodedToken.role.includes("ADMIN");
     const isGoogleUser = decodedToken.authProvider === "google";
-    
-    console.log("✅ Usuario admin:", isAdmin);
-    console.log("✅ Usuario de Google:", isGoogleUser);
-    console.log("🌎 Ruta actual:", location.pathname);
 
     if (requireAdmin && !isAdmin) {
-      console.log("🚫 Bloqueo: Usuario sin permisos de admin intentó entrar.");
-      return <Navigate to="/" />;
+      return <Navigate to="/" replace />;
     }
 
     if (requireAdmin && isMobile) {
-      console.log("🚫 Bloqueo: Usuario admin en versión mobile intentó acceder.");
-      return <Navigate to="/no-permitido" />;
+      return <Navigate to="/no-permitido" replace />;
     }
 
     if (requireNonGoogle && isGoogleUser) {
-      console.log("🚫 Bloqueo: Usuario de Google intentando modificar la contraseña.");
-      return <Navigate to="/" />;
+      return <Navigate to="/" replace />;
     }
 
     return children;
-  } catch (error) {
-    console.error("⚠️ Error al decodificar el token:", error);
-    return <Navigate to="/login" />;
+  } catch {
+    return <Navigate to="/login" replace />;
   }
 };
 

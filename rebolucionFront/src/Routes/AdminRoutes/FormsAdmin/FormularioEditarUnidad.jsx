@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
+import { getToken } from "../../../utils/auth";
 
 const FormularioEditarUnidad = ({ unidad, cerrarFormulario, fetchUnidades }) => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const FormularioEditarUnidad = ({ unidad, cerrarFormulario, fetchUnidades }) => 
         });
         
         // Obtener la lista de módulos para el selector
-        const jwt = localStorage.getItem("jwt");
+        const jwt = getToken();
         if (!jwt) {
           throw new Error("No estás autenticado");
         }
@@ -68,7 +69,7 @@ const FormularioEditarUnidad = ({ unidad, cerrarFormulario, fetchUnidades }) => 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const jwt = localStorage.getItem("jwt");
+    const jwt = getToken();
     if (!jwt) {
       Swal.fire({
         icon: 'error',

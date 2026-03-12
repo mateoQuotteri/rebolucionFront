@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Input from "../../Components/UI/InputForm";
 import { Eye, EyeOff } from "lucide-react";
+import { getToken } from "../../utils/auth";
+import { useAuth } from "../../Context/AuthContext";
 
 const EditPassword = () => {
+  const { user } = useAuth();
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -68,8 +71,7 @@ const EditPassword = () => {
 
     try {
       // Obtener datos del usuario y token
-      const user = JSON.parse(localStorage.getItem("user"));
-      const token = localStorage.getItem("jwt");
+      const token = getToken();
 
       if (!user || !token) {
         alert("Sesión no válida. Por favor, inicia sesión nuevamente.");

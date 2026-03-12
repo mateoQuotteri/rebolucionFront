@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getToken } from "../../utils/auth";
 
 const Modulos = () => {
   // Hook para la navegación
@@ -29,7 +30,7 @@ const Modulos = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`, // Asegúrate de tener un token almacenado
+          Authorization: `Bearer ${getToken()}`, // Asegúrate de tener un token almacenado
         },
       });
       if (!response.ok) {

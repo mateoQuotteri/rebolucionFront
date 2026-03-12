@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getToken } from "../../utils/auth";
 
 const ModuloDetail = () => {
   const { id } = useParams(); // Obtener el id de los parámetros de la URL
@@ -41,7 +42,7 @@ const ModuloDetail = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`, // Token JWT del localStorage
+          Authorization: `Bearer ${getToken()}`, // Token JWT del localStorage
         },
       });
 
@@ -64,7 +65,7 @@ const ModuloDetail = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 

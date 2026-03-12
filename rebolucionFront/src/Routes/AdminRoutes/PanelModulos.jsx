@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 import FormularioModulo from "./FormsAdmin/FormularioModulo";
 import FormularioEditarModulo from "./FormsAdmin/FormularioEditarModulo";
+import { getToken } from "../../utils/auth";
 
 const PanelModulos = () => {
   const [modulos, setModulos] = useState([]);
@@ -13,7 +14,7 @@ const PanelModulos = () => {
 
   const fetchModulos = async () => {
     try {
-      const token = localStorage.getItem("jwt");
+      const token = getToken();
       if (!token) {
         throw new Error("No se encontró el token de autenticación");
       }
@@ -41,7 +42,7 @@ const PanelModulos = () => {
 
   const fetchModuloDetalles = async (id) => {
     try {
-      const token = localStorage.getItem("jwt");
+      const token = getToken();
       if (!token) {
         throw new Error("No se encontró el token de autenticación");
       }
@@ -82,7 +83,7 @@ const PanelModulos = () => {
     // Si el usuario confirma
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem("jwt");
+        const token = getToken();
         if (!token) {
           throw new Error("No estás autenticado");
         }

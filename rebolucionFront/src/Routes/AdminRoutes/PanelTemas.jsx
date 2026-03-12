@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import FormularioTema from "./FormsAdmin/FormularioTema";
 import FormularioEditarTema from "./FormsAdmin/FormularioEditarTema";
 import Swal from 'sweetalert2';
+import { getToken } from "../../utils/auth";
 
 const PanelTemas = () => {
   const [temas, setTemas] = useState([]);
@@ -13,7 +14,7 @@ const PanelTemas = () => {
 
   const fetchTemas = async () => {
     try {
-      const jwt = localStorage.getItem("jwt");
+      const jwt = getToken();
       const response = await fetch("http://localhost:8080/temas", {
         headers: { Authorization: `Bearer ${jwt}` },
       });
@@ -43,7 +44,7 @@ const PanelTemas = () => {
 
   const handleEliminarTema = async (id) => {
     try {
-      const jwt = localStorage.getItem("jwt");
+      const jwt = getToken();
       const response = await fetch(`http://localhost:8080/api/admin/eliminar-tema/${id}`, {
         method: 'DELETE',
         headers: {

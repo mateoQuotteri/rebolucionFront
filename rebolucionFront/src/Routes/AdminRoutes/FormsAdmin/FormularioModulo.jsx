@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
+import { getToken } from "../../../utils/auth";
 
 const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
   }, []);
 
   const fetchTemas = async () => {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = getToken();
     if (!jwt) {
       setLoading(false);
       return;
@@ -58,7 +59,7 @@ const FormularioModulo = ({ cerrarFormulario, fetchModulos }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const jwt = localStorage.getItem("jwt");
+    const jwt = getToken();
     if (!jwt) {
       Swal.fire({
         icon: 'error',
