@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ModuloDetail = () => {
@@ -6,6 +6,18 @@ const ModuloDetail = () => {
   const [modulo, setModulo] = useState(null);
   const [unidades, setUnidades] = useState([]);
   const [error, setError] = useState("");
+  const [selectedUnidad, setSelectedUnidad] = useState(null);
+  const videoRef = useRef(null);
+
+  // Función para convertir URLs de YouTube a formato embed
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    const watchMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
+    if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}`;
+    const shortMatch = url.match(/youtu\.be\/([^?]+)/);
+    if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}`;
+    return url;
+  };
 
   // Función para formatear URLs de Imgur
   const formatImgurUrl = (url) => {
@@ -132,15 +144,19 @@ const ModuloDetail = () => {
                   <h4 className="text-lg font-bold violeta mb-2 truncate">{unidad.nombre}</h4>
                   <p className="text-sm text-gray-600 mb-4 line-clamp-2">{unidad.descripcion}</p>
                 </div>
-                <a
-                  href={unidad.video}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 back-violeta blanco font-bold rounded-md hover:back-naranja 
-                  transition-colors duration-300 text-center relative z-10"
+                <button
+                  onClick={() => {
+                    const next = selectedUnidad?.id === unidad.id ? null : unidad;
+                    setSelectedUnidad(next);
+                    if (next) {
+                      setTimeout(() => videoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+                    }
+                  }}
+                  className="p-2 back-violeta blanco font-bold rounded-md hover:back-naranja
+                  transition-colors duration-300 text-center relative z-10 w-full"
                 >
-                  Ver Video
-                </a>
+                  {selectedUnidad?.id === unidad.id ? "Cerrar Video" : "Ver Video"}
+                </button>
               </div>
 
               {/* Fondo decorativo que se revela en hover */}
@@ -163,6 +179,30 @@ const ModuloDetail = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Reproductor de video embebido */}
+      {selectedUnidad && (
+        <div ref={videoRef} className="mt-8 back-blanco rounded-xl shadow-lg p-6 transition-all duration-500">
+          <div className="flex justify-between items-center mb-4">
+            <h4 className="text-xl font-bold violeta">{selectedUnidad.nombre}</h4>
+            <button
+              onClick={() => setSelectedUnidad(null)}
+              className="p-2 back-violeta blanco font-bold rounded-md hover:back-naranja transition-colors duration-300 text-sm"
+            >
+              Cerrar
+            </button>
+          </div>
+          <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+            <iframe
+              src={getEmbedUrl(selectedUnidad.video)}
+              title={selectedUnidad.nombre}
+              className="absolute inset-0 w-full h-full rounded-lg"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
         </div>
       )}
     </div>
